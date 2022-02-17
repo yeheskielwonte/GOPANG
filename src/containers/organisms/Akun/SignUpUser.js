@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView,Alert } from 'react-native'
 import React, {useState} from 'react'
 import Input from '../../../components/atoms/Input'
 import Button from '../../../components/atoms/Button';
 import TextTouchable from '../../../components/atoms/TextTouchable';
 
-const SignUpUser = () => {
+const SignUpUser = ({navigation}) => {
     const [text] = useState(null);
     const [number] = useState(null);
 
@@ -28,13 +28,14 @@ const SignUpUser = () => {
         </View>
 
         {/* Render Button Sign Up dan Touchable Sign In */}
-        <Button title={'Sign Up'} btnView={styles.btnSignUp} />
+        <Button title={'Sign Up'} btnView={styles.btnSignUp} onPress={() => Alert.alert('Your Registration Is Successful')} />
     
         <TextTouchable 
         ViewContainer={styles.ContainertxtSignIn}
         txtStyling={styles.textAlready}
         text={'Already Have an Account'}
-        stylingText={styles.titleSignin} 
+        stylingTitle={styles.titleSignin} 
+        onPress={()=>navigation.replace('UserScreen')}
         title={'Sign In'}
         />
         

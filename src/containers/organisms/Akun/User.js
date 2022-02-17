@@ -7,7 +7,7 @@ import TextTouchable from '../../../components/atoms/TextTouchable';
 
 
 
-const User = () => {
+const User = ({navigation}) => {
   const [text] = useState(null);
   const [number] = useState(null);
 
@@ -58,6 +58,7 @@ const User = () => {
           txtStyling={styles.textDont}
           text={'Dont have an account?'}
           stylingTitle={styles.titleSignup} 
+          onPress={()=>navigation.replace('SignUpUser')}
           title={'Sign Up'}
           />
 
