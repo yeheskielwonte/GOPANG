@@ -1,0 +1,91 @@
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import React, {useState} from 'react'
+import Input from '../../../components/atoms/Input'
+import Button from '../../../components/atoms/Button';
+import TextTouchable from '../../../components/atoms/TextTouchable';
+
+const SignUpUser = () => {
+    const [text] = useState(null);
+    const [number] = useState(null);
+
+  return (
+    <ScrollView>
+    <View style={{flex:1}}>
+      
+        <View style={{alignItems:'center'}}>
+            <Text style={styles.fontUser}>User</Text>
+            <Text style={styles.fontSignup}>Sign Up</Text>
+            <Text style={styles.fontCreate}>First create your account</Text>
+        </View>
+
+        {/* Render TextInput */}
+        <View style={styles.InputContainer}>
+            <Input placeholder={'Full Name'} />
+            <Input placeholder={'Email'} type={text} />
+            <Input placeholder={'Phone Number'} type={number} />
+            <Input placeholder={'Password'} type={number} TextEntry={true} />
+            <Input placeholder={'Confirm your password'} type={number} TextEntry={true} />
+        </View>
+
+        {/* Render Button Sign Up dan Touchable Sign In */}
+        <Button title={'Sign Up'} btnView={styles.btnSignUp} />
+    
+        <TextTouchable 
+        ViewContainer={styles.txtView}
+        txtStyling={styles.textAlready}
+        text={'Already Have an Account'}
+        stylingText={styles.textSignup} 
+        title={'Sign In'}
+        />
+        
+    </View>
+    </ScrollView>
+  )
+}
+
+export default SignUpUser
+
+const styles = StyleSheet.create({
+    InputContainer:{
+        marginTop:70,
+        alignItems:'center'
+    },
+    fontSignup:{
+        fontWeight:'bold',
+        fontSize:40,
+        alignItems:'center',
+        color:'#000000'
+    },
+    fontUser:{
+        fontWeight:'bold',
+        fontSize:17,
+        alignItems:'center',
+        color:'#000000',
+        marginTop:70,
+    },
+    fontCreate:{
+        fontWeight:'bold',
+        fontSize:16,
+        alignItems:'center',
+        color:'#A8A6A7',
+        marginTop:27
+    },
+    textSignup:{ 
+        color:'#007AFF',
+        fontWeight:'bold',
+        fontSize:16,
+    },
+    textAlready:{
+        color:'#808080',
+        fontSize:16,
+    },
+    btnSignUp:{
+        marginTop:40,
+        alignItems:'center'
+    },
+    txtView:{
+        flexDirection:'row',
+        marginLeft:83,
+        marginTop:11.27
+    },
+})
