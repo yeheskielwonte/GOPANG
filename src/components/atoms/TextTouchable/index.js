@@ -6,7 +6,7 @@ const TextTouchable = (props) => {
     <View style={props.ViewContainer}>
       <Text style={props.txtStyling}>{props.text}</Text>
       <TouchableOpacity style={props.stylingTouchable} onPress={props.onPress}>
-        <Text style={props.stylingText}>{props.title}</Text>
+        <Text style={props.stylingTitle}>{props.title}</Text>
       </TouchableOpacity>
     </View>
   )

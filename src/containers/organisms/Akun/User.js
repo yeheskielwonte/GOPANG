@@ -31,38 +31,36 @@ const User = () => {
       </View>
 
       {/* Render Text Input yg so props */}
-      <SafeAreaView style={{alignItems:'center',marginTop:5.75}}>
-        <Input placeholder={'Email'} focus={true} type={text} />
-        <Input placeholder={'Password'} TextEntry={true} type={number} />
-      </SafeAreaView>
+      <View style={{alignItems:'center'}}>
+        <Input placeholder={'Email'} focus={true} type={text} input={styles.input} />
+        <Input placeholder={'Password'} TextEntry={true} type={number} input={styles.input} />
+      </View>
 
       {/* Forget Password props */}
-      <TextTouchable text={'Forgot Password?'} stylingText={styles.textForgot} />
+      <TextTouchable title={'Forgot Password?'} stylingTitle={styles.textForgot} />
 
       {/* Render Button dan dont have an account *button login yang props */}
       <View style={{alignItems:'center'}}>
 
           <Button title='Login' />
-          
+
           <Text style={styles.textOr}>Or</Text>
 
           <TouchableOpacity style={styles.ButtonGoogle}>
             <View style={{flexDirection:'row'}}>
               <Image source={require('../../../assets/logo/logoGoogle.png')} style={styles.logoGoogle} />
-              <Text style={styles.textButton}>Continue with Google</Text>
+              <Text style={styles.textButtonGoogle}>Continue with Google</Text>
             </View>
           </TouchableOpacity>
           
-          <View style={{flexDirection:'row'}}>
+          <TextTouchable 
+          ViewContainer={styles.ContainertxtSignUp}
+          txtStyling={styles.textDont}
+          text={'Dont have an account?'}
+          stylingTitle={styles.titleSignup} 
+          title={'Sign Up'}
+          />
 
-            <Text style={styles.textDonthaveacc}>Don't have an account? </Text>
-
-            <TextTouchable 
-            stylingTouchable={styles.tcbSignup}
-            stylingText={styles.textSignup}
-            text={'Sign Up'}
-            />
-          </View>
       </View>
     </View>
     </ScrollView> 
@@ -101,16 +99,6 @@ const styles = StyleSheet.create({
     marginTop:4,
     marginLeft:130
   },
-  input: {
-    height: 54,
-    width:343,
-    padding: 10,
-    fontSize:16,
-    borderRadius:6,
-    borderWidth:0.3,
-    backgroundColor:'#EDEDF0',
-    marginTop:10.29
-  },
   Button:{
     paddingTop:15,
     alignItems:'center',
@@ -119,24 +107,33 @@ const styles = StyleSheet.create({
     width:353.92,
     height:61.73,
   },
+  input:{
+    height: 54,
+    width:343,
+    padding: 10,
+    fontSize:16,
+    borderRadius:6,
+    borderWidth:0.3,
+    backgroundColor:'#EDEDF0',
+    marginTop:20,
+  },
   ButtonGoogle:{
     color:'#C7C8C8',
-    paddingTop:15,
     alignItems:'center',
     borderRadius:20,
     backgroundColor: "#C7C8C8",
     width:323.72,
     height:61,
   },
-  textButton:{
-    fontSize:20,
+  textButtonGoogle:{
+    fontSize:18,
     fontWeight: 'bold',
-    color:'white'
+    color:'white',
+    marginTop:20
   },
   textForgot:{
     marginLeft:236,
-    marginBottom:9,
-    marginTop :5.94,
+    marginBottom:10,
     color:'#007AFF',
     textDecorationLine:'underline'
   },
@@ -150,19 +147,22 @@ const styles = StyleSheet.create({
   logoGoogle:{
     width:24,
     height:27,
-    marginRight:17
+    marginRight:17,
+    marginTop:17
   },
-  textSignup:{ 
+  titleSignup:{ 
     color:'#007AFF',
     fontWeight:'bold'
   },
   tcbSignup:{
     marginLeft:7,
-    marginTop:11.27
   },
-  textDonthaveacc:{
+  textDont:{
     fontSize:16,
     color:'#A8A6A7',
+  },
+  ContainertxtSignUp:{
+    flexDirection:'row',
     marginTop:11.27
   }
 })

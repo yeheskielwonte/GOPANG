@@ -17,14 +17,6 @@ const Gopang=()=>{
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen
-          name='UserScreen'
-          component={UserScreen}
-        />
-        {/* <Stack.Screen
-          name='SignUpUser'
-          component={SignUpUser}
-        /> */}
-        {/* <Stack.Screen
           name='Splash'
           component={Splash}
         />
@@ -43,7 +35,11 @@ const Gopang=()=>{
         <Stack.Screen
           name='OwnerScreen'
           component={OwnerScreen}
-        /> */}
+        />
+        <Stack.Screen
+          name='SignUpUser'
+          component={SignUpUser}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

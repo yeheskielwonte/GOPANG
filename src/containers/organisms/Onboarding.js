@@ -140,9 +140,9 @@ const OnboardingScreen = ({navigation}) => {
                   SKIP
                 </Text>
               </TouchableOpacity>
-              <View style={{width: 21.5}} />
+              <View style={{width: 21.6}} />
               <TouchableOpacity
-                activeOpacity={.8}
+                activeOpacity={0.8}
                 onPress={goToNextSlide}
                 style={styles.btn}>
                 <Text
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 13,
     marginTop: 10,
-    maxWidth: '70%',
+    width:276,
     textAlign: 'center',
     lineHeight: 23,
   },

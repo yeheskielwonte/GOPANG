@@ -20,21 +20,21 @@ const SignUpUser = () => {
 
         {/* Render TextInput */}
         <View style={styles.InputContainer}>
-            <Input placeholder={'Full Name'} />
-            <Input placeholder={'Email'} type={text} />
-            <Input placeholder={'Phone Number'} type={number} />
-            <Input placeholder={'Password'} type={number} TextEntry={true} />
-            <Input placeholder={'Confirm your password'} type={number} TextEntry={true} />
+            <Input placeholder={'Full Name'} input={styles.input} />
+            <Input placeholder={'Email'} type={text} input={styles.input} />
+            <Input placeholder={'Phone Number'} type={number} input={styles.input} />
+            <Input placeholder={'Password'} type={number} TextEntry={true} input={styles.input} />
+            <Input placeholder={'Confirm your password'} type={number} TextEntry={true} input={styles.input} />
         </View>
 
         {/* Render Button Sign Up dan Touchable Sign In */}
         <Button title={'Sign Up'} btnView={styles.btnSignUp} />
     
         <TextTouchable 
-        ViewContainer={styles.txtView}
+        ViewContainer={styles.ContainertxtSignIn}
         txtStyling={styles.textAlready}
         text={'Already Have an Account'}
-        stylingText={styles.textSignup} 
+        stylingText={styles.titleSignin} 
         title={'Sign In'}
         />
         
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         color:'#A8A6A7',
         marginTop:27
     },
-    textSignup:{ 
+    titleSignin:{ 
         color:'#007AFF',
         fontWeight:'bold',
         fontSize:16,
@@ -83,9 +83,19 @@ const styles = StyleSheet.create({
         marginTop:40,
         alignItems:'center'
     },
-    txtView:{
+    ContainertxtSignIn:{
         flexDirection:'row',
         marginLeft:83,
         marginTop:11.27
+    },
+    input:{
+        height: 54,
+        width:343,
+        padding: 10,
+        fontSize:16,
+        borderRadius:6,
+        borderWidth:0.3,
+        backgroundColor:'#EDEDF0',
+        marginTop:20,
     },
 })

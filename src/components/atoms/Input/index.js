@@ -7,7 +7,7 @@ const Input = (props) => {
   return (
     <View>
       <TextInput
-        style={styles.input}
+        style={props.input}
         onChangeText={onChangeNumber}
         value={props.type}
         placeholder={props.placeholder}
@@ -21,14 +21,4 @@ const Input = (props) => {
 export default Input
 
 const styles = StyleSheet.create({
-    input:{
-        height: 54,
-        width:343,
-        padding: 10,
-        fontSize:16,
-        borderRadius:6,
-        borderWidth:0.3,
-        backgroundColor:'#EDEDF0',
-        marginTop:20
-    }
 })
