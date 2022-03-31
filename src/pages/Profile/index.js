@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const NavProfil = () => {
+const Profile = () => {
   return (
-    <View>
-      <Text>PROFIL</Text>
+    <View style={{flex: 1, justifyContent: 'center'}}>
+      <Text>Profil</Text>
     </View>
   );
 };
 
-export default NavProfil;
+export default Profile;
 
 const styles = StyleSheet.create({});
