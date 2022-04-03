@@ -9,6 +9,7 @@ const NavOrder = ({navigation}) => {
       <Header title="Order" />
       <TabOrder style={{flex: 1}} />
       {/* <View style={{flex: 1}}></View> */}
+      {/* Navigation */}
     </View>
   );
 };
