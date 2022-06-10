@@ -29,6 +29,8 @@ import AboutApp from '../AboutApp';
 import SignUpOwner from '../../containers/organisms/Akun/SignUpOwner';
 import OwnerMenu from '../OwnerMenu';
 import AddHomestay from '../OAddHomestay';
+import DetailsOwner from '../ODetails';
+import EditHomestay from '../OEditHomestay';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +64,8 @@ const Router = () => {
       <Stack.Screen name="AboutApp" component={AboutApp} />
       <Stack.Screen name="OwnerMenu" component={OwnerMenu} />
       <Stack.Screen name="AddHomestay" component={AddHomestay} />
+      <Stack.Screen name="DetailsOwner" component={DetailsOwner} />
+      <Stack.Screen name="EditHomestay" component={EditHomestay} />
     </Stack.Navigator>
   );
 };

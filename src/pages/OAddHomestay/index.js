@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,9 +11,120 @@ import Header from '../../components/molecules/header';
 import Input from '../../components/atoms/Input';
 import CheckBox from '@react-native-community/checkbox';
 import Button from '../../components/atoms/Button';
+import firebase from '../../config/Firebase';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
 
-const OAddHomestay = ({navigation}) => {
-  const [centang, setCentang] = useState(false);
+const OAddHomestay = ({navigation, route}) => {
+  const [Bedroom, setBedroom] = useState(false);
+  const [Bathroom, setBathroom] = useState(false);
+  const [AC, setAC] = useState(false);
+  const [Wifi, setWifi] = useState(false);
+
+  const {uid} = route.params;
+  const [users, setUsers] = useState({});
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [location, setLocation] = useState('');
+  //const [facility, setFacility] = useState('');
+  const [price, setPrice] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [hasPhoto, setHasPhoto] = useState(false);
+  const [photoBase64, setPhotoBase64] = useState('');
+  console.log(uid);
+
+  const getUser = () => {
+    firebase
+
+      .database()
+      .ref(`users/pelanggan/${uid}`)
+      .on('value', res => {
+        if (res.val()) {
+          setUsers(res.val());
+          console.log('ini', users);
+        }
+      });
+  };
+
+  const getImage = () => {
+    launchImageLibrary(
+      {maxHeight: 200, maxWidth: 200, includeBase64: true},
+      res => {
+        if (res.didCancel) {
+          setHasPhoto(false);
+          showMessage({
+            message: 'Upload photo cancel',
+            type: 'default',
+            backgroundColor: '#D9435E',
+            color: 'white',
+          });
+        } else {
+          setPhoto(res.assets[0].uri);
+          setPhotoBase64(res.assets[0].base64);
+          setHasPhoto(true);
+        }
+      },
+    );
+  };
+
+  const handleSubmit = () => {
+    if (
+      name.length == 0 ||
+      location.length == 0 ||
+      desc.length == 0 ||
+      price.length == 0 ||
+      hasPhoto == false
+    ) {
+      showMessage({
+        message: 'mana mana jo dang dulu',
+        type: 'default',
+        backgroundColor: '#D9435E',
+        color: 'white',
+      });
+    } else {
+      const data = {
+        price: price,
+        name: name,
+        description: desc,
+        location: location,
+        photo: photoBase64,
+        bedroom: Bedroom,
+        bathroom: Bathroom,
+        AC: AC,
+        wifi: Wifi,
+      };
+      firebase.database().ref(`homestay/${uid}`).set(data);
+      navigation.navigate('OwnerMenu', {uid: uid});
+      showMessage({
+        message: 'tesss',
+        type: 'default',
+        backgroundColor: 'green',
+        color: 'white',
+      });
+    }
+    // if (price) {
+    //   const data = {
+    //     price: price,
+    //     name: name,
+    //     description: desc,
+    //     location: location,
+    //     photo: photoBase64,
+    //   };
+    //   firebase.database().ref(`homestay/${uid}`).set(data);
+    //   navigate(`/src/containers/organisms/Akun/User.js/${uid}`);
+    //   showMessage({
+    //     message: 'Perubahan berhasil dilakukan',
+    //     type: 'default',
+    //     backgroundColor: 'green',
+    //     color: 'white',
+    //   });
+    // }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
       <Header
@@ -22,12 +133,30 @@ const OAddHomestay = ({navigation}) => {
         onBack={() => navigation.goBack()}
       />
 
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <Image
           source={require('../../assets/owner/ButtonAddFood.png')}
           style={{margin: 32, width: 347, height: 152}}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableOpacity style={styles.avatar} onPress={getImage}>
+          {hasPhoto && (
+            <Image
+              // source={require('../../assets/dummyChat/dummy3.jpg')}
+              style={{width: 110, height: 110, borderRadius: 8}}
+              source={{uri: photo}}
+            />
+          )}
+          {!hasPhoto && (
+            <View style={styles.addPhoto}>
+              <Text style={styles.textAddPhoto}>Add Photo Homestay</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
+
       <View>
         <Text style={{marginLeft: 40, fontWeight: 'bold', fontSize: 16}}>
           Homestay Name
@@ -36,8 +165,8 @@ const OAddHomestay = ({navigation}) => {
           <Input
             placeholder={'Full Name'}
             input={styles.input}
-            //   value={name}
-            // onChangeText={value => setName(value)}
+            value={name}
+            onChangeText={value => setName(value)}
           />
         </View>
         <Text
@@ -51,10 +180,10 @@ const OAddHomestay = ({navigation}) => {
         </Text>
         <View style={{alignItems: 'center', marginTop: 5}}>
           <Input
-            placeholder={'Full Name'}
+            placeholder={'Location'}
             input={styles.input}
-            //   value={name}
-            // onChangeText={value => setName(value)}
+            value={location}
+            onChangeText={value => setLocation(value)}
           />
         </View>
         <View style={styles.fasilitas}>
@@ -64,11 +193,11 @@ const OAddHomestay = ({navigation}) => {
               source={require('../../assets/owner/Doublebed.png')}
               style={{height: 28, width: 28}}
             />
-            <Text>bedroom</Text>
+            <Text>Bedroom</Text>
             <CheckBox
               disabled={false}
-              value={centang}
-              onValueChange={newValue => setCentang(newValue)}
+              value={Bedroom}
+              onValueChange={newValue => setBedroom(newValue)}
             />
           </View>
           <View
@@ -77,11 +206,11 @@ const OAddHomestay = ({navigation}) => {
               source={require('../../assets/owner/bathtub.png')}
               style={{height: 28, width: 28}}
             />
-            <Text>bedroom</Text>
+            <Text>Bathroom</Text>
             <CheckBox
               disabled={false}
-              value={centang}
-              onValueChange={newValue => setCentang(newValue)}
+              value={Bathroom}
+              onValueChange={newValue => setBathroom(newValue)}
             />
           </View>
           <View
@@ -90,11 +219,11 @@ const OAddHomestay = ({navigation}) => {
               source={require('../../assets/owner/AC.png')}
               style={{height: 28, width: 28}}
             />
-            <Text>bedroom</Text>
+            <Text>AC</Text>
             <CheckBox
               disabled={false}
-              value={centang}
-              onValueChange={newValue => setCentang(newValue)}
+              value={AC}
+              onValueChange={newValue => setAC(newValue)}
             />
           </View>
           <View
@@ -103,11 +232,11 @@ const OAddHomestay = ({navigation}) => {
               source={require('../../assets/owner/wifi.png')}
               style={{height: 28, width: 28}}
             />
-            <Text>bedroom</Text>
+            <Text>Wifi</Text>
             <CheckBox
               disabled={false}
-              value={centang}
-              onValueChange={newValue => setCentang(newValue)}
+              value={Wifi}
+              onValueChange={newValue => setWifi(newValue)}
             />
           </View>
         </View>
@@ -124,8 +253,8 @@ const OAddHomestay = ({navigation}) => {
           <Input
             placeholder={'Description'}
             input={styles.input}
-            //   value={name}
-            // onChangeText={value => setName(value)}
+            value={desc}
+            onChangeText={value => setDesc(value)}
           />
         </View>
         <Text
@@ -140,15 +269,22 @@ const OAddHomestay = ({navigation}) => {
         <View style={{alignItems: 'center', marginTop: 5}}>
           <Input
             placeholder={'Price'}
+            keyboardType="number-pad"
             input={styles.input}
-            //   value={name}
-            // onChangeText={value => setName(value)}
+            value={price}
+            onChangeText={value => setPrice(value)}
           />
         </View>
-        <Button
-          style={{marginTop: 147, marginBottom: 57.69, alignItems: 'center'}}
-          title={'Add Homestay'}
-        />
+        <View
+          style={{marginTop: 63, marginBottom: 57.69, alignItems: 'center'}}>
+          <Button
+            title={'Add Homestay'}
+            onPress={() => {
+              handleSubmit();
+            }}
+            // onPress={() => navigation.navigate('DetailsOwner')}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -174,5 +310,14 @@ const styles = StyleSheet.create({
     marginRight: 60,
     // width: '100%',
     // justifyContent: 'center',
+  },
+  avatar: {
+    width: 347,
+    height: 152,
+    borderWidth: 1,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });
