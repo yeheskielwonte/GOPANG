@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -8,8 +8,34 @@ import {
   View,
 } from 'react-native';
 import Header from '../../components/molecules/header';
+import firebase from '../../config/Firebase';
 
-const MenuGazebo = ({navigation}) => {
+const MenuGazebo = ({navigation, route}) => {
+  const {uid, homestayID} = route.params;
+  const [homestay, setHomestay] = useState({});
+  const [harga, setHarga] = useState('');
+
+  const handleSubmit = () => {
+    navigation.navigate('Biodata', {uid: uid, homestayID: homestayID});
+  };
+
+  const getHomestay = () => {
+    firebase
+
+      .database()
+      .ref(`homestay/${homestayID}`)
+      .on('value', res => {
+        if (res.val()) {
+          setHomestay(res.val());
+          setHarga(res.val().price);
+        }
+      });
+  };
+
+  useEffect(() => {
+    getHomestay();
+  }, []);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{flex: 1}}>
@@ -19,8 +45,13 @@ const MenuGazebo = ({navigation}) => {
         {/* Container */}
         <View>
           <Image
-            source={require('../../assets/homestay/HomestayWahyu.png')}
-            style={{width: '100%'}}
+            source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
+            style={{
+              width: '100%',
+              height: 271,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+            }}
           />
 
           {/* nama homestay & location */}
@@ -36,7 +67,7 @@ const MenuGazebo = ({navigation}) => {
                 fontWeight: 'bold',
                 marginLeft: '5.1%',
               }}>
-              Homestay Wahyu
+              {homestay.name}
             </Text>
             <Image
               source={require('../../assets/icon/Rating.png')}
@@ -44,7 +75,8 @@ const MenuGazebo = ({navigation}) => {
                 width: 51,
                 height: 17,
                 marginTop: 12,
-                marginLeft: '38.9%',
+                position: 'absolute',
+                right: 20,
               }}
             />
           </View>
@@ -62,7 +94,7 @@ const MenuGazebo = ({navigation}) => {
                 width: 288,
                 marginLeft: 3,
               }}>
-              Marinsow Village, Paal beach
+              {homestay.location}
             </Text>
           </TouchableOpacity>
 
@@ -73,35 +105,49 @@ const MenuGazebo = ({navigation}) => {
               height: 58,
               alignItems: 'center',
               marginTop: 10,
+              justifyContent: 'center',
             }}>
-            <View style={{width: 65, alignItems: 'center', marginLeft: 60}}>
-              <Image
-                source={require('../../assets/icon/Bedroom.png')}
-                style={styles.Fasilitas}
-              />
-              <Text style={styles.TFasilitas}>BEDROOM</Text>
-            </View>
-            <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
-              <Image
-                source={require('../../assets/icon/Bathroom.png')}
-                style={styles.Fasilitas}
-              />
-              <Text style={styles.TFasilitas}>BATHROOM</Text>
-            </View>
-            <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
-              <Image
-                source={require('../../assets/icon/Wifi.png')}
-                style={styles.Fasilitas}
-              />
-              <Text style={styles.TFasilitas}>WIFI</Text>
-            </View>
-            <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
-              <Image
-                source={require('../../assets/icon/AC.png')}
-                style={styles.Fasilitas}
-              />
-              <Text style={styles.TFasilitas}>AC</Text>
-            </View>
+            {homestay.bedroom === true && (
+              <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
+                <Image
+                  source={require('../../assets/icon/Bedroom.png')}
+                  style={styles.Fasilitas}
+                />
+                <Text style={styles.TFasilitas}>BEDROOM</Text>
+              </View>
+            )}
+            {/* Fasilitas Bathroom */}
+            {homestay.bathroom === true && (
+              <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
+                <Image
+                  source={require('../../assets/icon/Bathroom.png')}
+                  style={styles.Fasilitas}
+                />
+                <Text style={styles.TFasilitas}>BATHROOM</Text>
+              </View>
+            )}
+
+            {/* Fasilitas WiFi */}
+            {homestay.wifi === true && (
+              <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
+                <Image
+                  source={require('../../assets/icon/Wifi.png')}
+                  style={styles.Fasilitas}
+                />
+                <Text style={styles.TFasilitas}>WIFI</Text>
+              </View>
+            )}
+
+            {/* Fasilitas AC */}
+            {homestay.AC === true && (
+              <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
+                <Image
+                  source={require('../../assets/icon/AC.png')}
+                  style={styles.Fasilitas}
+                />
+                <Text style={styles.TFasilitas}>AC</Text>
+              </View>
+            )}
           </View>
 
           {/* Description */}
@@ -119,12 +165,7 @@ const MenuGazebo = ({navigation}) => {
               }}>
               Overview
             </Text>
-            <Text style={{fontSize: 17}}>
-              Offering Free Wi-Fi , the owner of this homestay is a head of the
-              village, you will got dinner but not for lunch, if you want a
-              lunch you can ask to owner of the homestay for lunch. and if you
-              have a cars or a motorcycle there's a free parking.
-            </Text>
+            <Text style={{fontSize: 17}}>{homestay.description}</Text>
           </View>
 
           {/* Check in/out */}
@@ -187,14 +228,14 @@ const MenuGazebo = ({navigation}) => {
               }}>
               <Text
                 style={{color: '#38A7D0', fontWeight: 'bold', fontSize: 20}}>
-                IDR 200.000
+                IDR {harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
               </Text>
               <Text style={{fontWeight: 'bold', fontSize: 12, marginTop: 7}}>
                 /Night
               </Text>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('Biodata')}>
+                onPress={() => handleSubmit(homestayID)}>
                 <Text style={styles.textButton}>Booking Now</Text>
               </TouchableOpacity>
             </View>

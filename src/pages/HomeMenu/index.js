@@ -8,14 +8,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import firebase from '../../config/Firebase';
-import iconHome from '../../assets/icon/home.png';
-import iconOrder from '../../assets/icon/order.png';
-import iconChat from '../../assets/icon/chat.png';
-import iconUser from '../../assets/icon/user.png';
+
 import CardHomestay from '../../components/molecules/CardHomestay';
 
-const HomeMenu = ({navigation}) => {
+const HomeMenu = ({navigation, route}) => {
+  const {uid} = route.params;
   const [pictures, setPictures] = useState([]);
+
+  const handleSubmit = key => {
+    navigation.navigate('infoHomestay', {uid: uid, homestayID: key});
+  };
 
   useEffect(() => {
     firebase
@@ -119,6 +121,7 @@ const HomeMenu = ({navigation}) => {
                 title={key.name}
                 location={key.location}
                 image={`${key.photo}`}
+                onPress={() => handleSubmit(key.id)}
               />
             </View>
           ))}

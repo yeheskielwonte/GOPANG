@@ -96,7 +96,7 @@ const OAddHomestay = ({navigation, route}) => {
       firebase.database().ref(`homestay/${uid}`).set(data);
       navigation.navigate('OwnerMenu', {uid: uid});
       showMessage({
-        message: 'tesss',
+        message: 'Sucsess Add Homestay',
         type: 'default',
         backgroundColor: 'green',
         color: 'white',
@@ -145,7 +145,7 @@ const OAddHomestay = ({navigation, route}) => {
           {hasPhoto && (
             <Image
               // source={require('../../assets/dummyChat/dummy3.jpg')}
-              style={{width: 110, height: 110, borderRadius: 8}}
+              style={{width: 347, height: 152, borderRadius: 8}}
               source={{uri: photo}}
             />
           )}
@@ -157,7 +157,7 @@ const OAddHomestay = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <View style={{marginTop: 15}}>
         <Text style={{marginLeft: 40, fontWeight: 'bold', fontSize: 16}}>
           Homestay Name
         </Text>
