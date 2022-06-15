@@ -16,7 +16,7 @@ const MenuGazebo = ({navigation, route}) => {
   const [harga, setHarga] = useState('');
 
   const handleSubmit = () => {
-    navigation.navigate('Biodata', {uid: uid, homestayID: homestayID});
+    navigation.navigate('OverviewPage', {uid: uid, homestayID: homestayID});
   };
 
   const getHomestay = () => {
@@ -236,7 +236,7 @@ const MenuGazebo = ({navigation, route}) => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleSubmit(homestayID)}>
-                <Text style={styles.textButton}>Booking Now</Text>
+                <Text style={styles.textButton}>Booking</Text>
               </TouchableOpacity>
             </View>
           </View>

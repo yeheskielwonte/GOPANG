@@ -12,28 +12,84 @@ import {setForm} from '../../redux';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../components/atoms/Input';
 import ButtonTransaction from '../../components/atoms/ButtonTransaction';
+import firebase from '../../config/Firebase';
+import {showMessage} from 'react-native-flash-message';
 
 const Biodata = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
 
   console.log(homestayID);
 
-  const [text] = useState(null);
+  const [users, setUsers] = useState({});
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [youremail, setYouremail] = useState('');
+  const [yournumber, setYournumber] = useState('');
 
-  const form = useSelector(state => state.BiodataReducer); //destructuring form dll.
-  const dispatch = useDispatch();
+  const getUser = () => {
+    firebase
 
-  const onInputChange = (value, inputType) => {
-    dispatch(setForm(inputType, value));
+      .database()
+      .ref(`users/pelanggan/${uid}`)
+      .on('value', res => {
+        if (res.val()) {
+          setUsers(res.val());
+          console.log('ini', users);
+        }
+      });
   };
 
-  const sendData = () => {
-    console.log('data yang dikirim', form);
+  const handleSubmit = () => {
+    if (
+      firstname.length == 0 ||
+      lastname.length == 0 ||
+      youremail.length == 0 ||
+      yournumber.length == 0
+    ) {
+      showMessage({
+        message: 'Your data is not complete',
+        type: 'default',
+        backgroundColor: '#D9435E',
+        color: 'white',
+      });
+    } else {
+      const data = {
+        firstname: firstname,
+        lastname: lastname,
+        youremail: youremail,
+        yournumber: yournumber,
+      };
+      firebase.database().ref(`homestay/${uid}`).set(data);
+      navigation.navigate('OverviewPage', {uid: uid});
+      showMessage({
+        message: 'Sucsess Add Your Data',
+        type: 'default',
+        backgroundColor: 'green',
+        color: 'white',
+      });
+    }
   };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  // const [text] = useState(null);
+
+  // const form = useSelector(state => state.BiodataReducer); //destructuring form dll.
+  // const dispatch = useDispatch();
+
+  // const onInputChange = (value, inputType) => {
+  //   dispatch(setForm(inputType, value));
+  // };
+
+  // const sendData = () => {
+  //   console.log('data yang dikirim', form);
+  // };
 
   return (
-    <ScrollView>
-      <View style={{flex: 1}}>
+    <ScrollView style={{backgroundColor: 'white'}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
         <Header title="Fill in your info" onBack={() => navigation.goBack()} />
 
         {/* Container */}
@@ -63,10 +119,9 @@ const Biodata = ({navigation, route}) => {
             <View style={{alignItems: 'center'}}>
               <Input
                 placeholder={'Enter your first name...'}
-                type={text}
                 input={styles.input}
-                value={form.FirstName}
-                onChangeText={value => onInputChange(value, 'FirstName')}
+                value={firstname}
+                onChangeText={value => setFirstname(value)}
               />
             </View>
 
@@ -82,10 +137,9 @@ const Biodata = ({navigation, route}) => {
             <View style={{alignItems: 'center'}}>
               <Input
                 placeholder={'Enter your last name...'}
-                type={text}
                 input={styles.input}
-                value={form.LastName}
-                onChangeText={value => onInputChange(value, 'LastName')}
+                value={lastname}
+                onChangeText={value => setLastname(value)}
               />
             </View>
 
@@ -101,10 +155,9 @@ const Biodata = ({navigation, route}) => {
             <View style={{alignItems: 'center'}}>
               <Input
                 placeholder={'Enter your Email...'}
-                type={text}
                 input={styles.input}
-                value={form.Email}
-                onChangeText={value => onInputChange(value, 'Email')}
+                value={youremail}
+                onChangeText={value => setYouremail(value)}
               />
             </View>
 
@@ -120,17 +173,18 @@ const Biodata = ({navigation, route}) => {
             <View style={{alignItems: 'center'}}>
               <Input
                 placeholder={'Enter your phone number...'}
-                type={text}
                 input={styles.input}
-                value={form.MobilePhone}
-                onChangeText={value => onInputChange(value, 'MobilePhone')}
+                value={yournumber}
+                onChangeText={value => setYournumber(value)}
               />
             </View>
 
             <ButtonTransaction
               title={'Confirm'}
               btnView={styles.btnView}
-              onPress={() => navigation.navigate('OverviewPage')}
+              onPress={() => {
+                handleSubmit();
+              }}
             />
           </View>
         </View>
