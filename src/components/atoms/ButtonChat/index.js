@@ -1,37 +1,30 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  TouchableHighlight,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 
-const Button = props => {
+const ButtonChat = (props, {navigation}) => {
   return (
     <View style={props.btnView}>
       {/* for se tampil button discreen mana saja */}
-      <TouchableHighlight
-        underlayColor={{color: '#006688'}}
-        style={styles.Button}
-        onPress={props.onPress}>
+      <TouchableOpacity style={styles.Button} onPress={props.onPress}>
         <Text style={styles.textButton}>{props.title}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default Button;
+export default ButtonChat;
 
 const styles = StyleSheet.create({
   Button: {
+    marginTop: 5,
+    //alignItems: 'center',
+    marginLeft: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 40,
     backgroundColor: '#38A7D0',
-    width: 154.4,
-    height: 63.31,
+    width: 355,
+    height: 46,
   },
   textButton: {
     fontSize: 18,

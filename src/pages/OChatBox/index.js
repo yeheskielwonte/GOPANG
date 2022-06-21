@@ -6,7 +6,7 @@ import dummy1 from '../../assets/dummyChat/dummy1.jpg';
 import dummy2 from '../../assets/dummyChat/dummy2.jpg';
 import dummy3 from '../../assets/dummyChat/dummy3.jpg';
 
-const ChatBox = ({navigation}) => {
+const OChatBox = ({navigation}) => {
   const [inbox] = useState([
     {
       id: 1,
@@ -23,14 +23,14 @@ const ChatBox = ({navigation}) => {
     {
       id: 3,
       profile: dummy3,
-      name: 'Mr. Yuta',
+      name: 'Mr. Dani',
       desc: 'Halo..',
     },
   ]);
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header title="Messege" />
+      <Header title="Chat" />
 
       <View style={styles.container}>
         {inbox.map(Inbox => {
@@ -49,7 +49,7 @@ const ChatBox = ({navigation}) => {
   );
 };
 
-export default ChatBox;
+export default OChatBox;
 
 const styles = StyleSheet.create({
   container: {

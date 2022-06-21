@@ -90,7 +90,7 @@ const ODetails = ({navigation, route}) => {
                 width: 288,
                 marginLeft: 3,
               }}>
-              {homestay.location}
+              {homestay.alamat}
             </Text>
           </TouchableOpacity>
 
@@ -101,10 +101,11 @@ const ODetails = ({navigation, route}) => {
               height: 58,
               alignItems: 'center',
               marginTop: 10,
+              justifyContent: 'center',
             }}>
             {/* Fasilitas Bedroom */}
             {homestay.bedroom === true && (
-              <View style={{width: 65, alignItems: 'center', marginLeft: 60}}>
+              <View style={{width: 65, alignItems: 'center', marginLeft: 15}}>
                 <Image
                   source={require('../../assets/icon/Bedroom.png')}
                   style={styles.Fasilitas}
@@ -167,11 +168,12 @@ const ODetails = ({navigation, route}) => {
 
           {/* Check in/out */}
           <View style={{marginLeft: 25, marginTop: 36}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Price</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold', top: 10}}>
+              Price
+            </Text>
             <View
               style={{
                 flexDirection: 'row',
-                marginTop: 21.68,
                 marginBottom: 34.65,
                 height: 57.35,
                 alignItems: 'center',

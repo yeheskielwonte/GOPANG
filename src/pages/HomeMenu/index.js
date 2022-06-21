@@ -119,7 +119,7 @@ const HomeMenu = ({navigation, route}) => {
             <View style={{flexDirection: 'row'}}>
               <CardHomestay
                 title={key.name}
-                location={key.location}
+                location={key.alamat}
                 image={`${key.photo}`}
                 onPress={() => handleSubmit(key.id)}
               />
@@ -186,7 +186,9 @@ const HomeMenu = ({navigation, route}) => {
         </Text>
         <View>
           <View style={styles.restaurant}>
-            <TouchableOpacity style={styles.Trestaurant}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ProfilWarung')}
+              style={styles.Trestaurant}>
               <Image source={require('../../assets/home/WarungJessica.png')} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.Trestaurant}>

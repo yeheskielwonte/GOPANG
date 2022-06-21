@@ -13,6 +13,8 @@ import React, {useState, useEffect} from 'react';
 import Header from '../../components/molecules/header';
 import ButtonTransaction from '../../components/atoms/ButtonTransaction';
 import firebase from '../../config/Firebase';
+import CountDown from 'react-native-countdown-component';
+import ButtonChat from '../../components/atoms/ButtonChat';
 
 const TransactionDetails = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
@@ -125,12 +127,12 @@ const TransactionDetails = ({navigation, route}) => {
       <View
         style={{
           marginTop: 13,
-          justifyContent: 'space-between',
           marginBottom: 13,
-          marginLeft: 20,
+          justifyContent: 'center',
+          // marginLeft: 20,
           flexDirection: 'row',
         }}>
-        <Text
+        {/* <Text
           style={{
             fontSize: 20,
             fontWeight: 'bold',
@@ -144,7 +146,14 @@ const TransactionDetails = ({navigation, route}) => {
             fontWeight: 'bold',
           }}>
           23.30.15
-        </Text>
+        </Text> */}
+        <CountDown
+          until={50}
+          digitStyle={{backgroundColor: 'white'}}
+          onFinish={() => alert('finished')}
+          onPress={() => alert('hello')}
+          size={15}
+        />
       </View>
 
       <View
@@ -153,13 +162,29 @@ const TransactionDetails = ({navigation, route}) => {
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           width: 371,
           alignSelf: 'center',
+          bottom: 10,
+        }}
+      />
+
+      <ButtonChat
+        title="Start Chatting"
+        onPress={() => navigation.navigate('Chat', uid)}
+      />
+
+      <View
+        style={{
+          height: 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          width: 371,
+          alignSelf: 'center',
+          top: 10,
         }}
       />
 
       <ButtonTransaction
         title={'Book Now'}
         btnView={styles.btnView}
-        onPress={() => navigation.replace('SuccessPage')}
+        // onPress={() => navigation.replace('SuccessPage')}
       />
     </View>
   );

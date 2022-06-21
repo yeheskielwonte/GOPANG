@@ -25,6 +25,7 @@ const OAddHomestay = ({navigation, route}) => {
   const [users, setUsers] = useState({});
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
+  const [alamat, setAlamat] = useState('');
   const [location, setLocation] = useState('');
   //const [facility, setFacility] = useState('');
   const [price, setPrice] = useState('');
@@ -70,6 +71,7 @@ const OAddHomestay = ({navigation, route}) => {
   const handleSubmit = () => {
     if (
       name.length == 0 ||
+      alamat.length == 0 ||
       location.length == 0 ||
       desc.length == 0 ||
       price.length == 0 ||
@@ -86,6 +88,7 @@ const OAddHomestay = ({navigation, route}) => {
         price: price,
         name: name,
         description: desc,
+        alamat: alamat,
         location: location,
         photo: photoBase64,
         bedroom: Bedroom,
@@ -94,7 +97,7 @@ const OAddHomestay = ({navigation, route}) => {
         wifi: Wifi,
       };
       firebase.database().ref(`homestay/${uid}`).set(data);
-      navigation.navigate('OwnerMenu', {uid: uid});
+      navigation.navigate('OnavigationBar', {uid: uid});
       showMessage({
         message: 'Sucsess Add Homestay',
         type: 'default',
@@ -167,6 +170,23 @@ const OAddHomestay = ({navigation, route}) => {
             input={styles.input}
             value={name}
             onChangeText={value => setName(value)}
+          />
+        </View>
+        <Text
+          style={{
+            marginLeft: 40,
+            paddingTop: 15,
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}>
+          Address
+        </Text>
+        <View style={{alignItems: 'center', marginTop: 5}}>
+          <Input
+            placeholder={'Address'}
+            input={styles.input}
+            value={alamat}
+            onChangeText={value => setAlamat(value)}
           />
         </View>
         <Text

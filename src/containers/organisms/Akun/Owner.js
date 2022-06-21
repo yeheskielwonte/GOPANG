@@ -33,7 +33,7 @@ const User = ({navigation}) => {
       .then(res => {
         setLoading(false);
         const uid = res.user.uid;
-        navigation.replace('OwnerMenu', {uid: res.user.uid});
+        navigation.replace('OnavigationBar', {uid: res.user.uid});
         // console.log(uid);
       })
       .catch(error => {

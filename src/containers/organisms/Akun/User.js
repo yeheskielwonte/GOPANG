@@ -25,6 +25,7 @@ const User = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
+    setLoading(true);
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
