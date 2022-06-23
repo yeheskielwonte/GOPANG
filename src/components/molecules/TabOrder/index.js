@@ -3,12 +3,17 @@ import {View, useWindowDimensions, StatusBar, Text} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import TabOrderOngoing from '../TabOrder2';
 import TabOrderHistory from '../TabOder3';
+import firebase from '../../../config/Firebase';
 
-const FirstRoute = () => (
-  <View style={{flex: 1, backgroundColor: 'white'}}>
-    <TabOrderOngoing style={{flex: 1}} />
-  </View>
-);
+const FirstRoute = props => {
+  const uid = props.uid;
+  console.log('ini uid di tabOrder', uid);
+  return (
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <TabOrderOngoing uid={uid} style={{flex: 1}} />
+    </View>
+  );
+};
 
 const SecondRoute = () => (
   <View style={{flex: 1, backgroundColor: 'white'}}>

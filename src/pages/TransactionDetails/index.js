@@ -46,7 +46,7 @@ const TransactionDetails = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Header title="Transaction" onBack={() => navigation.goBack()} />
+      <Header title="Transaction" />
 
       <View style={{flexDirection: 'row'}}>
         <View style={{marginLeft: 20, marginRight: 61, marginTop: 30}}>
@@ -148,10 +148,10 @@ const TransactionDetails = ({navigation, route}) => {
           23.30.15
         </Text> */}
         <CountDown
-          until={50}
+          until={2400000}
           digitStyle={{backgroundColor: 'white'}}
           onFinish={() => alert('finished')}
-          onPress={() => alert('hello')}
+          // onPress={() => alert('hello')}
           size={15}
         />
       </View>
@@ -182,7 +182,7 @@ const TransactionDetails = ({navigation, route}) => {
       />
 
       <ButtonTransaction
-        title={'Book Now'}
+        title={'Paid'}
         btnView={styles.btnView}
         // onPress={() => navigation.replace('SuccessPage')}
       />

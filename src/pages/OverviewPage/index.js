@@ -18,7 +18,25 @@ const OverviewPage = ({navigation, route}) => {
 
   const [users, setUsers] = useState({});
 
+  console.log('id', homestayID);
+
   const handleSubmit = () => {
+    const data = {
+      status: 'unpaid',
+      namaPenyewa: users.name,
+      namaHomestay: homestay.name,
+      IDhomestay: homestayID,
+      IDpenyewa: uid,
+      emailPenyewa: users.email,
+      phonePenyewa: users.number,
+      alamatHomestay: homestay.alamat,
+      fotoHomestay: homestay.photo,
+      harga: homestay.price,
+      total: homestay.price,
+      kategori: 'homestay',
+    };
+
+    firebase.database().ref(`transaksi`).push(data);
     navigation.navigate('TransactionDetails', {
       uid: uid,
       homestayID: homestayID,
@@ -64,16 +82,14 @@ const OverviewPage = ({navigation, route}) => {
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <Header title="Booking overview" onBack={() => navigation.goBack()} />
+        <Header title="Booking overview" />
 
         <View style={{flexDirection: 'row'}}>
           <View style={{marginLeft: 20, marginRight: 61, marginTop: 49}}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
               {homestay.name}
             </Text>
-            <Text style={{fontSize: 15, marginTop: 3}}>
-              {homestay.location}
-            </Text>
+            <Text style={{fontSize: 15, marginTop: 3}}>{homestay.alamat}</Text>
             <Image
               style={{width: 51, height: 20, marginTop: 7}}
               source={require('../../assets/icon/Rating.png')}
@@ -256,9 +272,9 @@ const OverviewPage = ({navigation, route}) => {
         </View>
 
         <ButtonTransaction
-          title={'Next'}
+          title={'Pay'}
           btnView={styles.btnView}
-          onPress={() => handleSubmit(homestayID)}
+          onPress={() => handleSubmit()}
         />
       </View>
     </ScrollView>

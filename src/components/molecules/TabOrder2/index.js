@@ -1,12 +1,66 @@
-import * as React from 'react';
-import {View, useWindowDimensions, StatusBar, Text} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  useWindowDimensions,
+  StatusBar,
+  Text,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import HCardTransaksi from '../HCardTransaksi';
+import firebase from '../../../config/Firebase';
 
-const FirstRoute = () => (
-  <View style={{flex: 1, backgroundColor: 'white'}}></View>
-);
+const FirstRoute = props => {
+  const uid = props.uid;
+  console.log('ini uid', uid);
+  const [transaksi, setTransaksi] = useState([]);
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`transaksi`)
+      .on('value', res => {
+        if (res.val()) {
+          //ubah menjadi array object
+          const rawData = res.val();
+          const productArray = [];
+          // console.log(keranjang[0].namaProduk);
+          Object.keys(rawData).map(key => {
+            productArray.push({
+              id: key,
+              ...rawData[key],
+            });
+          });
+          setTransaksi(productArray);
+        }
+      });
+  }, []);
+  return (
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      {/* transaksi
+          .filter((item) => item.idPenyewa.includes(uid)) */}
+      {transaksi
+        .filter(
+          item =>
+            // item.IDpenyewa.includes(uid) &&
+            item.status !== 'completed' && item.kategori.includes('homestay'),
+        )
+        .map(key => (
+          <HCardTransaksi
+            nama={key.namaHomestay}
+            alamat={key.alamatHomestay}
+            harga={key.total}
+            status={key.status}
+            photo={key.fotoHomestay}
+          />
+        ))}
+    </View>
+  );
+};
 
-const SecondRoute = () => <View style={{flex: 1, backgroundColor: 'white'}} />;
+const SecondRoute = () => {
+  return <View style={{flex: 1, backgroundColor: 'white'}}></View>;
+};
 
 const renderScene = SceneMap({
   first: FirstRoute,
