@@ -17,6 +17,7 @@ const OverviewPage = ({navigation, route}) => {
   const [harga, setHarga] = useState('');
 
   const [users, setUsers] = useState({});
+  const [userss, setUserss] = useState({});
 
   console.log('id', homestayID);
 
@@ -79,6 +80,25 @@ const OverviewPage = ({navigation, route}) => {
     getUser();
   }, []);
 
+  const getUserr = () => {
+    firebase
+
+      .database()
+      .ref(`users/owner/${homestayID}`)
+      .on('value', res => {
+        if (res.val()) {
+          setUserss(res.val());
+          //   setOnPhoto(true);
+          console.log(users.photo);
+        }
+        console.log('ini user', users);
+      });
+  };
+
+  useEffect(() => {
+    getUserr();
+  }, []);
+
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -94,6 +114,22 @@ const OverviewPage = ({navigation, route}) => {
               style={{width: 51, height: 20, marginTop: 7}}
               source={require('../../assets/icon/Rating.png')}
             />
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: 'bold',
+                marginTop: 18,
+              }}>
+              Owner : {userss.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: 'bold',
+                marginTop: 8,
+              }}>
+              {userss.number}
+            </Text>
           </View>
           <Image
             style={{
@@ -107,10 +143,11 @@ const OverviewPage = ({navigation, route}) => {
             source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
           />
         </View>
+
         <View
           style={{
             height: 1,
-            marginTop: 26,
+            marginTop: 18,
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
             width: 371,
             alignSelf: 'center',
