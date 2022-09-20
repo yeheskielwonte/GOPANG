@@ -32,9 +32,10 @@ export default LoginOptions;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
   Logo: {
-    marginLeft: 133,
+    // marginLeft: 133,
   },
   loginAs: {
     marginTop: 123,

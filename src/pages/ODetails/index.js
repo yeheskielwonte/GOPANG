@@ -6,6 +6,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Modal,
+  TextInput,
+  Button,
 } from 'react-native';
 import Header from '../../components/molecules/header';
 import firebase from '../../config/Firebase';
@@ -14,6 +17,29 @@ const ODetails = ({navigation, route}) => {
   const {uid} = route.params;
   const [homestay, setHomestay] = useState({});
   const [harga, setHarga] = useState('');
+  const [statusModal, setStatusModal] = useState(false);
+  const [namaBaru, setNamaBaru] = useState('');
+  const [alamatBaru, setAlamatBaru] = useState('');
+  const [descriptionBaru, setDescriptionBaru] = useState('');
+  const [priceBaru, setPriceBaru] = useState('');
+
+  const handleSubmit = () => {
+    setStatusModal(false);
+    const data = {
+      AC: homestay.AC,
+      alamat: alamatBaru,
+      bathroom: homestay.bathroom,
+      bedroom: homestay.bedroom,
+      description: descriptionBaru,
+      location: homestay.location,
+      name: namaBaru,
+      photo: homestay.photo,
+      price: priceBaru,
+      status: homestay.status,
+      wifi: homestay.wifi,
+    };
+    firebase.database().ref(`homestay/${uid}`).set(data);
+  };
 
   const getHomestay = () => {
     firebase
@@ -34,6 +60,92 @@ const ODetails = ({navigation, route}) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <Modal visible={statusModal} transparent={true} animationType="slide">
+        <View style={styles.Box}>
+          <Text
+            style={{
+              left: 10,
+              fontSize: 18,
+              color: 'black',
+              top: 5,
+              fontWeight: '600',
+            }}>
+            Edit your homestay
+          </Text>
+          <Text
+            style={{
+              left: 10,
+              fontSize: 15,
+              color: 'black',
+              top: 8,
+              fontWeight: '600',
+            }}>
+            Name
+          </Text>
+          <TextInput
+            placeholder={homestay.name}
+            style={styles.textInput}
+            value={namaBaru}
+            onChangeText={value => setNamaBaru(value)}
+          />
+          <Text
+            style={{
+              left: 10,
+              fontSize: 15,
+              color: 'black',
+              top: 8,
+              fontWeight: '600',
+            }}>
+            Address
+          </Text>
+          <TextInput
+            placeholder={homestay.description}
+            style={styles.textInput}
+            value={alamatBaru}
+            onChangeText={value => setAlamatBaru(value)}
+          />
+          <Text
+            style={{
+              left: 10,
+              fontSize: 15,
+              color: 'black',
+              top: 8,
+              fontWeight: '600',
+            }}>
+            Description
+          </Text>
+          <TextInput
+            placeholder={homestay.description}
+            style={styles.textInput}
+            value={descriptionBaru}
+            onChangeText={value => setDescriptionBaru(value)}
+          />
+          <Text
+            style={{
+              left: 10,
+              fontSize: 15,
+              color: 'black',
+              top: 8,
+              fontWeight: '600',
+            }}>
+            Price
+          </Text>
+          <TextInput
+            placeholder={homestay.description}
+            style={styles.textInput}
+            value={priceBaru}
+            onChangeText={value => setPriceBaru(value)}
+          />
+          <TouchableOpacity style={styles.Button} onPress={handleSubmit}>
+            <Text style={styles.Save}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{position: 'absolute', bottom: 19, right: 27}}
+            onPress={() => setStatusModal(false)}>
+            <Text style={{color: 'black', fontSize: 15}}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <View style={{flex: 1}}>
         {/* Header */}
         <Header title="Detail Homestay" onBack={() => navigation.goBack()} />
@@ -65,6 +177,12 @@ const ODetails = ({navigation, route}) => {
               }}>
               {homestay.name}
             </Text>
+            <TouchableOpacity
+              style={{position: 'absolute', right: 25}}
+              onPress={() => setStatusModal(true)}>
+              <Image source={require('../../assets/warung/penEdit.png')} />
+            </TouchableOpacity>
+
             <Image
               source={require('../../assets/icon/Rating.png')}
               style={{
@@ -73,6 +191,7 @@ const ODetails = ({navigation, route}) => {
                 marginTop: 12,
                 position: 'absolute',
                 right: 20,
+                top: 20,
               }}
             />
           </View>
@@ -185,11 +304,11 @@ const ODetails = ({navigation, route}) => {
               <Text style={{fontWeight: 'bold', fontSize: 12, marginTop: 7}}>
                 /Night
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('EditHomestay')}>
+                onPress={() => navigation.navigate('EditHomestay', {uid})}>
                 <Text style={styles.textButton}>Edit</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>
@@ -232,5 +351,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+  },
+  Box: {
+    backgroundColor: '#E6E6E6',
+    opacity: 0.9,
+    width: 320,
+    height: 420,
+    borderRadius: 5,
+    alignSelf: 'center',
+    top: '10%',
+  },
+  textInput: {
+    // backgroundColor: 'red',
+    borderColor: '#020202',
+    borderWidth: 1,
+    borderRadius: 5,
+    top: 5,
+    margin: 7,
+    paddingLeft: 15,
+  },
+  Button: {
+    position: 'absolute',
+    backgroundColor: '#38A7D0',
+    alignSelf: 'center',
+    width: '40%',
+    height: '10%',
+    bottom: 10,
+    borderRadius: 5,
+    justifyContent: 'center',
+  },
+  Save: {
+    fontSize: 20,
+    color: 'white',
+    alignSelf: 'center',
   },
 });

@@ -1,5 +1,10 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from '../../../config/utils/responsive';
+// import {heightMobileUI, widthMobileUI} from '../../../config/utils';
 
 const Button = (props, {navigation}) => {
   return (
@@ -20,8 +25,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     backgroundColor: '#38A7D0',
-    width: 323.72,
-    height: 61,
+    // width: 323.72,
+    width: responsiveWidth(320),
+    height: responsiveHeight(61),
   },
   textButton: {
     fontSize: 18,

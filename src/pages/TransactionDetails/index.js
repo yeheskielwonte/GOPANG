@@ -245,7 +245,7 @@ const TransactionDetails = ({navigation, route, props}) => {
           flexDirection: 'row',
         }}>
         <CountDown
-          until={2400000}
+          until={86400}
           digitStyle={{backgroundColor: 'white'}}
           onFinish={() => alert('finished')}
           // onPress={() => alert('hello')}

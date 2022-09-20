@@ -14,6 +14,7 @@ import Input from '../../components/atoms/Input';
 import Button from '../../components/atoms/Button';
 import RadioButtonRN from 'radio-buttons-react-native';
 import firebase from '../../config/Firebase';
+import Loading from '../../components/molecules/Loading';
 
 const AddFood = ({navigation, route}) => {
   const {uid} = route.params;
@@ -26,6 +27,8 @@ const AddFood = ({navigation, route}) => {
   const [photoBase64, setPhotoBase64] = useState('');
   const [kategori, setKategori] = useState('');
   console.log(uid);
+
+  const [loading, setLoading] = useState(false);
 
   const getUser = () => {
     firebase
@@ -42,7 +45,7 @@ const AddFood = ({navigation, route}) => {
 
   const getImage = () => {
     launchImageLibrary(
-      {maxHeight: 200, maxWidth: 200, includeBase64: true},
+      {maxHeight: 720, maxWidth: 1280, includeBase64: true},
       res => {
         if (res.didCancel) {
           setHasPhoto(false);
@@ -76,7 +79,8 @@ const AddFood = ({navigation, route}) => {
         photo: photoBase64,
         kategori: kategori,
       };
-      firebase.database().ref(`warung/${uid}/food`).push(data);
+      firebase.database().ref(`warung/${uid}/food/`).push(data);
+      setLoading(false);
       navigation.navigate('Warung', {uid: uid});
       showMessage({
         message: 'Sucsess Add Add',
@@ -124,90 +128,93 @@ const AddFood = ({navigation, route}) => {
   ];
 
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-      <Header
-        title="Add Food"
-        navigation={navigation}
-        onBack={() => navigation.goBack()}
-      />
+    <>
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+        <Header
+          title="Add Food"
+          navigation={navigation}
+          onBack={() => navigation.goBack()}
+        />
 
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <TouchableOpacity style={styles.avatar} onPress={getImage}>
-          {hasPhoto && (
-            <Image
-              // source={require('../../assets/dummyChat/dummy3.jpg')}
-              style={{borderRadius: 152 / 2, width: 152, height: 152}}
-              source={{uri: photo}}
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity style={styles.avatar} onPress={getImage}>
+            {hasPhoto && (
+              <Image
+                // source={require('../../assets/dummyChat/dummy3.jpg')}
+                style={{borderRadius: 152 / 2, width: 152, height: 152}}
+                source={{uri: photo}}
+              />
+            )}
+            {!hasPhoto && (
+              <View style={styles.addPhoto}>
+                <Text style={styles.textAddPhoto}>Add Photo Food</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={{top: 40}}>
+          <Text style={{marginLeft: 30, fontWeight: 'bold', fontSize: 16}}>
+            Food Name
+          </Text>
+          <View style={{alignItems: 'center', marginTop: 5}}>
+            <Input
+              placeholder={'Food Name'}
+              input={styles.input}
+              value={name}
+              onChangeText={value => setName(value)}
             />
-          )}
-          {!hasPhoto && (
-            <View style={styles.addPhoto}>
-              <Text style={styles.textAddPhoto}>Add Photo Food</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
+          </View>
 
-      <View style={{top: 40}}>
-        <Text style={{marginLeft: 30, fontWeight: 'bold', fontSize: 16}}>
-          Food Name
-        </Text>
-        <View style={{alignItems: 'center', marginTop: 5}}>
-          <Input
-            placeholder={'Food Name'}
-            input={styles.input}
-            value={name}
-            onChangeText={value => setName(value)}
-          />
-        </View>
+          <Text
+            style={{
+              marginLeft: 30,
+              paddingTop: 15,
+              fontWeight: 'bold',
+              fontSize: 16,
+            }}>
+            Price
+          </Text>
+          <View style={{alignItems: 'center', marginTop: 5}}>
+            <Input
+              placeholder={'Price'}
+              keyboardType="number-pad"
+              input={styles.input}
+              value={price}
+              onChangeText={value => setPrice(value)}
+            />
+          </View>
 
-        <Text
-          style={{
-            marginLeft: 30,
-            paddingTop: 15,
-            fontWeight: 'bold',
-            fontSize: 16,
-          }}>
-          Price
-        </Text>
-        <View style={{alignItems: 'center', marginTop: 5}}>
-          <Input
-            placeholder={'Price'}
-            keyboardType="number-pad"
-            input={styles.input}
-            value={price}
-            onChangeText={value => setPrice(value)}
-          />
-        </View>
+          <View
+            style={{
+              margin: 10,
+              marginLeft: 30,
+              marginRight: 20,
+            }}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>Category</Text>
+            <RadioButtonRN
+              data={data}
+              selectedBtn={e => setKategori(e.value)}
+              withoutBox="false"
+            />
+          </View>
 
-        <View
-          style={{
-            margin: 10,
-            marginLeft: 30,
-            marginRight: 20,
-          }}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Category</Text>
-          <RadioButtonRN
-            data={data}
-            selectedBtn={e => setKategori(e.value)}
-            withoutBox="false"
-          />
+          <View
+            style={{marginTop: 63, marginBottom: 57.69, alignItems: 'center'}}>
+            <Button
+              title={'Add Food'}
+              onPress={() => {
+                handleSubmit();
+              }}
+              onValueChange={data => setKategori(data)}
+              style={{width: 206, height: 58}}
+              // onPress={() => navigation.navigate('DetailsOwner')}
+            />
+          </View>
         </View>
-
-        <View
-          style={{marginTop: 63, marginBottom: 57.69, alignItems: 'center'}}>
-          <Button
-            title={'Add Food'}
-            onPress={() => {
-              handleSubmit();
-            }}
-            onValueChange={data => setKategori(data)}
-            style={{width: 206, height: 58}}
-            // onPress={() => navigation.navigate('DetailsOwner')}
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      {loading && <Loading />}
+    </>
   );
 };
 
