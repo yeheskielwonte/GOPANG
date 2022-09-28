@@ -5,9 +5,11 @@ import TabOrderOngoing from '../TabOrder2';
 import TabOrderHistory from '../TabOder3';
 import firebase from '../../../config/Firebase';
 
-const TabOrder = ({uid}) => {
+const TabOrder = props => {
   const layout = useWindowDimensions();
-
+  const {uid, navigation} = props;
+  // console.log('nav : ', navigation);
+  // console.log('props di taborder 1:', props);
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'first', title: 'Ongoing'},
@@ -18,7 +20,7 @@ const TabOrder = ({uid}) => {
     console.log('ini uid di tabOrder', uid);
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <TabOrderOngoing uid={uid} style={{flex: 1}} />
+        <TabOrderOngoing uid={uid} style={{flex: 1}} navigation={navigation} />
       </View>
     );
   };

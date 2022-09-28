@@ -65,6 +65,7 @@ const AddFood = ({navigation, route}) => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     if (name.length == 0 || price.length == 0 || hasPhoto == false) {
       showMessage({
         message: 'All data must be filled!!',
@@ -80,14 +81,16 @@ const AddFood = ({navigation, route}) => {
         kategori: kategori,
       };
       firebase.database().ref(`warung/${uid}/food/`).push(data);
-      setLoading(false);
-      navigation.navigate('Warung', {uid: uid});
-      showMessage({
-        message: 'Sucsess Add Add',
-        type: 'default',
-        backgroundColor: 'green',
-        color: 'white',
-      });
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate('Warung', {uid: uid});
+        showMessage({
+          message: 'Sucsess Add Add',
+          type: 'default',
+          backgroundColor: 'green',
+          color: 'white',
+        });
+      }, 2000);
     }
     // if (price) {
     //   const data = {

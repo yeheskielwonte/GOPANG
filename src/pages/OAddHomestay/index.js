@@ -49,7 +49,7 @@ const OAddHomestay = ({navigation, route}) => {
 
   const getImage = () => {
     launchImageLibrary(
-      {maxHeight: 200, maxWidth: 200, includeBase64: true},
+      {maxHeight: 720, maxWidth: 1280, includeBase64: true},
       res => {
         if (res.didCancel) {
           setHasPhoto(false);

@@ -12,7 +12,9 @@ import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import HCardTransaksi from '../HCardTransaksi';
 import firebase from '../../../config/Firebase';
 
-const TabOrderr = ({uid}) => {
+const TabOrderr = ({navigation, route}) => {
+  const {uid} = route.params;
+  console.log('props di tab 2, navigation :', navigation);
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
@@ -21,7 +23,11 @@ const TabOrderr = ({uid}) => {
     {key: 'second', title: 'Food'},
   ]);
 
-  const FirstRoute = props => {
+  const onPressCard = () => {
+    console.log('sdfsdfj');
+  };
+
+  const FirstRoute = () => {
     console.log('ini uid taborder2', uid);
     const [transaksi, setTransaksi] = useState([]);
     useEffect(() => {
@@ -63,6 +69,7 @@ const TabOrderr = ({uid}) => {
                 harga={key.total}
                 status={key.status}
                 photo={key.fotoHomestay}
+                navigation={navigation}
               />
             ))}
         </ScrollView>

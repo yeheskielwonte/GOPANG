@@ -2,10 +2,11 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const HCardTransaksi = props => {
+  console.log('props di card transaksi:', props);
   //   const price = this.props.harga;
   return (
     <View>
-      <TouchableOpacity style={{flexDirection: 'row'}}>
+      <TouchableOpacity style={{flexDirection: 'row'}} onPress={props.onPress}>
         <Image
           style={{
             // position: 'absolute',

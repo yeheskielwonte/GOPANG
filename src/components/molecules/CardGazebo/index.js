@@ -16,7 +16,13 @@ const CardGazebo = props => {
         borderBottomColor: '#464646',
         borderBottomWidth: 1,
       }}>
-      <Image source={props.image} style={{marginTop: 14, marginBottom: 14}} />
+      <View style={{width: 80, height: 87}}>
+        <Image
+          source={{uri: `${props.Image}`}}
+          style={{marginTop: 14, marginBottom: 14}}
+        />
+      </View>
+
       <View
         style={{
           marginLeft: 12,
@@ -46,14 +52,16 @@ const CardGazebo = props => {
         <View
           style={{
             width: 110,
-            height: 14,
+            height: 20,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             marginTop: 29,
             marginLeft: 11,
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: 12}}>Size: 4x4</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 12}}>
+            Size: {props.size}
+          </Text>
 
           <View style={styles.button}>
             <ButtonDetails onSubmit={props.onPress} />
@@ -87,6 +95,7 @@ const styles = StyleSheet.create({
     marginRight: 55,
   },
   button: {
-    marginLeft: '37.9%',
+    position: 'absolute',
+    marginLeft: '77%',
   },
 });

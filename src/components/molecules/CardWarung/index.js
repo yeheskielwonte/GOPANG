@@ -16,10 +16,23 @@ const CardWarung = props => {
         alignItems: 'flex-start',
         padding: 0,
       }}>
-      <Image source={props.image} style={{marginTop: 14, marginBottom: 14}} />
       <View
         style={{
-          marginLeft: 12,
+          width: 138,
+          height: 88,
+          backgroundColor: 'red',
+          borderRadius: 20,
+          top: 5,
+        }}>
+        <Image
+          source={{uri: `data:image/jpeg;base64, ${props.image}`}}
+          style={{marginTop: 14, marginBottom: 14}}
+        />
+      </View>
+
+      <View
+        style={{
+          marginLeft: '0%',
           flexDirection: 'column',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
@@ -40,9 +53,11 @@ const CardWarung = props => {
           </View>
 
           <View style={{flexDirection: 'row', marginLeft: 11}}>
-            <Text style={styles.harga}>{props.harga}</Text>
+            <Text style={styles.harga}>IDR. {props.harga}</Text>
           </View>
-          <ButtonAdd />
+          <View style={{position: 'absolute', right: '20%', bottom: '-45%'}}>
+            <ButtonAdd onPress={props.onPress} />
+          </View>
         </View>
         <View
           style={{

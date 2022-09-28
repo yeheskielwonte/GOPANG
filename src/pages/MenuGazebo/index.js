@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,8 +10,37 @@ import {
 } from 'react-native';
 import Header from '../../components/molecules/header';
 import CardGazebo from '../../components/molecules/CardGazebo';
+import firebase from '../../config/Firebase';
 
-const MenuGazebo = ({navigation}) => {
+const MenuGazebo = ({navigation, route}) => {
+  const {uid} = route.params;
+  const [pictures, setPictures] = useState([]);
+
+  const handleSubmit = key => {
+    navigation.navigate('InfoGazebo', {uid: uid, gazeboID: key});
+  };
+
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`gazebo`)
+      .on('value', res => {
+        if (res.val()) {
+          //ubah menjadi array object
+          const rawData = res.val();
+          const productArray = [];
+          // console.log(keranjang[0].namaProduk);
+          Object.keys(rawData).map(key => {
+            productArray.push({
+              id: key,
+              ...rawData[key],
+            });
+          });
+          setPictures(productArray);
+        }
+      });
+  }, []);
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* Header */}
@@ -29,28 +58,17 @@ const MenuGazebo = ({navigation}) => {
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{top: '-18%'}}>
         {/* Gazebo 1 */}
-        <CardGazebo
-          title="Gazebo Wahyu"
-          location="Marinsow Village, North Sulawesi"
-          image={require('../../assets/home/Wahyu.png')}
-          onPress={() => navigation.navigate('InfoGazebo')}
-        />
-
-        {/* Gazebo 2 */}
-        <CardGazebo
-          title="Gazebo Juniver"
-          location="Marinsow Village, North Sulawesi"
-          image={require('../../assets/home/Juniver.png')}
-          onPress={() => navigation.navigate('InfoGazebo')}
-        />
-        {/* Gazebo 3 */}
-        <CardGazebo
-          title="Gazebo Jembatan"
-          location="Marinsow Village, North Sulawesi"
-          image={require('../../assets/home/Juniver.png')}
-        />
+        {pictures.map(key => (
+          <CardGazebo
+            title="Gazebo Wahyu"
+            location={key.location}
+            image={`${key.photo}`}
+            size={key.size}
+            onPress={() => handleSubmit(key.id, {uid})}
+          />
+        ))}
       </ScrollView>
     </View>
   );
@@ -64,8 +82,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   searchBox: {
-    width: 371,
-    height: 45,
+    width: '95%',
+    height: '23%',
     paddingRight: 20,
     paddingLeft: 26,
     borderWidth: 1,

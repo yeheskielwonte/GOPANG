@@ -8,7 +8,6 @@ import {
   Touchable,
   TouchableHighlight,
   Alert,
-  Linking,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Header from '../../components/molecules/header';
@@ -17,38 +16,27 @@ import firebase from '../../config/Firebase';
 import CountDown from 'react-native-countdown-component';
 import ButtonChat from '../../components/atoms/ButtonChat';
 
-const TransactionDetails = ({navigation, route, props}) => {
+const TransactionDetailsOrder = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
-  const [homestay, setHomestay] = useState({});
+  const [transaksi, setTransaksi] = useState({});
   const [users, setUsers] = useState({});
   const [userss, setUserss] = useState({});
 
-  const handleSubmit = () => {
-    navigation.navigate('TransactionDetails', {
-      uid: uid,
-      homestayID: homestayID,
-    });
-  };
-
-  const getHomestay = () => {
+  const getTransaksi = () => {
     firebase
 
       .database()
-      .ref(`homestay/${homestayID}`)
+      .ref(`transaksi/${homestayID}`)
       .on('value', res => {
         if (res.val()) {
-          setHomestay(res.val());
+          setTransaksi(res.val());
           //   setHarga(res.val().price);
         }
       });
   };
 
   useEffect(() => {
-    getHomestay();
-  }, []);
-
-  useEffect(() => {
-    getHomestay();
+    getTransaksi();
   }, []);
 
   const getUser = () => {
@@ -60,51 +48,16 @@ const TransactionDetails = ({navigation, route, props}) => {
         if (res.val()) {
           setUsers(res.val());
           //   setOnPhoto(true);
-          console.log(users.photo);
+          // console.log(users.photo);
         }
-        console.log('ini user', users);
+        //   console.log('ini user', users);
       });
   };
 
   useEffect(() => {
     getUser();
   }, []);
-
-  const getUserr = () => {
-    firebase
-
-      .database()
-      .ref(`users/owner/${homestayID}`)
-      .on('value', res => {
-        if (res.val()) {
-          setUserss(res.val());
-          //   setOnPhoto(true);
-          console.log(users.photo);
-        }
-        console.log('ini user', users);
-      });
-  };
-
-  useEffect(() => {
-    getUserr();
-  }, []);
-
-  const sendOnWa = () => {
-    let mobile = userss.number;
-    if (mobile) {
-      // Kode negara 62 = Indonesia
-      let url = 'whatsapp://send?text=' + '&phone=62' + userss.number;
-      Linking.openURL(url)
-        .then(data => {
-          console.log('WhatsApp Opened');
-        })
-        .catch(() => {
-          alert('Make sure Whatsapp installed on your device');
-        });
-    } else {
-      alert('Nomor telepon pembeli tidak terdaftar di Whatsapp.');
-    }
-  };
+  console.log('homestayID ', homestayID);
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -113,20 +66,22 @@ const TransactionDetails = ({navigation, route, props}) => {
       <View style={{flexDirection: 'row'}}>
         <View style={{marginLeft: 20, marginRight: 61, marginTop: 30}}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            {homestay.name}
+            {transaksi.namaHomestay}
           </Text>
-          <Text style={{fontSize: 15, marginTop: 3}}>{homestay.location}</Text>
-          <Image
-            style={{width: 51, height: 20, marginTop: 7}}
-            source={require('../../assets/icon/Rating.png')}
-          />
+          <Text style={{fontSize: 15, marginTop: 3}}>
+            {transaksi.alamatHomestay}
+          </Text>
+          {/* <Image
+              style={{width: 51, height: 20, marginTop: 7}}
+              source={require('../../assets/icon/Rating.png')}
+            /> */}
           <Text
             style={{
               fontSize: 15,
               fontWeight: 'bold',
               marginTop: 18,
             }}>
-            Owner : {userss.name}
+            Owner : {transaksi.namaOwner}
           </Text>
           <Text
             style={{
@@ -134,7 +89,7 @@ const TransactionDetails = ({navigation, route, props}) => {
               fontWeight: 'bold',
               marginTop: 8,
             }}>
-            Number : {userss.number}
+            {transaksi.noHandphoneOwner}
           </Text>
         </View>
         <Image
@@ -146,7 +101,7 @@ const TransactionDetails = ({navigation, route, props}) => {
             height: 106,
             borderRadius: 20,
           }}
-          source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
+          source={{uri: `data:image/jpeg;base64, ${transaksi.fotoHomestay}`}}
         />
       </View>
       <View
@@ -193,7 +148,7 @@ const TransactionDetails = ({navigation, route, props}) => {
         }}
       />
 
-      {/* <View
+      <View
         style={{
           marginTop: 13,
           justifyContent: 'space-between',
@@ -225,16 +180,16 @@ const TransactionDetails = ({navigation, route, props}) => {
             <Image source={require('../../assets/icon/ArrowRight.png')} />
           </View>
         </TouchableHighlight>
-      </View> */}
+      </View>
 
-      {/* <View
+      <View
         style={{
           height: 1,
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           width: 371,
           alignSelf: 'center',
         }}
-      /> */}
+      />
 
       <View
         style={{
@@ -245,7 +200,7 @@ const TransactionDetails = ({navigation, route, props}) => {
           flexDirection: 'row',
         }}>
         <CountDown
-          until={86400}
+          until={2400000}
           digitStyle={{backgroundColor: 'white'}}
           onFinish={() => alert('finished')}
           // onPress={() => alert('hello')}
@@ -263,7 +218,10 @@ const TransactionDetails = ({navigation, route, props}) => {
         }}
       />
 
-      <ButtonChat title="Chat Owner" onPress={() => sendOnWa()} />
+      <ButtonChat
+        title="Chat Owner"
+        onPress={() => navigation.navigate('Chat', uid)}
+      />
 
       <View
         style={{
@@ -275,16 +233,29 @@ const TransactionDetails = ({navigation, route, props}) => {
         }}
       />
 
-      <ButtonTransaction
-        title={'Pay'}
-        btnView={styles.btnView}
-        // onPress={() => navigation.replace('SuccessPage')}
-      />
+      <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 40}}>
+        <View>
+          <ButtonTransaction
+            title={'Paid'}
+            btnView={styles.btnView}
+            onPress={() => navigation.replace('NavigationBar', {uid: uid})}
+          />
+        </View>
+        <View style={{marginLeft: '10%', marginTop: 10}}>
+          {/* <Image
+            style={{width: 80, height: 80, alignSelf: 'center'}}
+            source={require('../../assets/icon/iconOrderStatus.png')}
+          /> */}
+          <Text style={{fontSize: 20, alignSelf: 'center'}}>
+            {transaksi.status}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
 
-export default TransactionDetails;
+export default TransactionDetailsOrder;
 
 const styles = StyleSheet.create({
   btnView: {
@@ -293,83 +264,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-// import {
-//   StyleSheet,
-//   Text,
-//   View,
-//   Image,
-//   Dimensions,
-//   ScrollView,
-//   Touchable,
-//   TouchableHighlight,
-//   Alert,
-//   Linking,
-// } from 'react-native';
-// import React, {useState, useEffect} from 'react';
-// import Header from '../../components/molecules/header';
-// import ButtonTransaction from '../../components/atoms/ButtonTransaction';
-// import firebase from '../../config/Firebase';
-// import CountDown from 'react-native-countdown-component';
-// import ButtonChat from '../../components/atoms/ButtonChat';
-
-// const TransactionDetails = () => {
-//   return (
-//     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-//       <Header title="Transaction" />
-//       <View>
-//         <View style={{flexDirection: 'row'}}>
-//           <View style={{marginLeft: 20, marginRight: 61, marginTop: 30}}>
-//             <Text style={{fontSize: 20, fontWeight: 'bold'}}>marinsow</Text>
-//             <Text style={{fontSize: 15, marginTop: 3}}>paal</Text>
-//             <Image
-//               style={{width: 51, height: 20, marginTop: 7}}
-//               source={require('../../assets/icon/Rating.png')}
-//             />
-//             <Text
-//               style={{
-//                 fontSize: 15,
-//                 fontWeight: 'bold',
-//                 marginTop: 18,
-//               }}>
-//               Owner :
-//             </Text>
-//             <Text
-//               style={{
-//                 fontSize: 15,
-//                 fontWeight: 'bold',
-//                 marginTop: 8,
-//               }}>
-//               012310
-//             </Text>
-//           </View>
-//           <Image
-//             style={{
-//               position: 'absolute',
-//               marginTop: 30,
-//               marginLeft: '65.1%',
-//               width: 111,
-//               height: 106,
-//               borderRadius: 20,
-//             }}
-//             source={require('../../assets/home/Juniver.png')}
-//             // source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
-//           />
-//         </View>
-//         <View
-//           style={{
-//             height: 1,
-//             marginTop: 18,
-//             backgroundColor: 'rgba(0, 0, 0, 0.3)',
-//             width: 371,
-//             alignSelf: 'center',
-//           }}
-//         />
-//       </View>
-//     </ScrollView>
-//   );
-// };
-
-// export default TransactionDetails;
-
-// const styles = StyleSheet.create({});

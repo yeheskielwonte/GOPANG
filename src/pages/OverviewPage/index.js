@@ -30,6 +30,8 @@ const OverviewPage = ({navigation, route}) => {
       IDpenyewa: uid,
       emailPenyewa: users.email,
       phonePenyewa: users.number,
+      noHandphoneOwner: userss.number,
+      namaOwner: userss.name,
       alamatHomestay: homestay.alamat,
       fotoHomestay: homestay.photo,
       harga: homestay.price,
@@ -128,7 +130,7 @@ const OverviewPage = ({navigation, route}) => {
                 fontWeight: 'bold',
                 marginTop: 8,
               }}>
-              {userss.number}
+              Number : {userss.number}
             </Text>
           </View>
           <Image
@@ -309,7 +311,7 @@ const OverviewPage = ({navigation, route}) => {
         </View>
 
         <ButtonTransaction
-          title={'Pay'}
+          title={'Confirm'}
           btnView={styles.btnView}
           onPress={() => handleSubmit()}
         />

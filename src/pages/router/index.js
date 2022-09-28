@@ -43,6 +43,7 @@ import OnavigationBar from '../OnavigationBar';
 import AddWarung from '../OAddWarung';
 import Warung from '../OWarung';
 import AddFood from '../OAddFood';
+import TransactionDetailsOrder from '../TransactionDetailsOrder';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +94,10 @@ const Router = () => {
       <Stack.Screen name="AddWarung" component={AddWarung} />
       <Stack.Screen name="Warung" component={Warung} />
       <Stack.Screen name="AddFood" component={AddFood} />
+      <Stack.Screen
+        name="TransactionDetailsOrder"
+        component={TransactionDetailsOrder}
+      />
     </Stack.Navigator>
   );
 };

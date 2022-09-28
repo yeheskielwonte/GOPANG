@@ -11,6 +11,9 @@ import {
   Button,
 } from 'react-native';
 import Header from '../../components/molecules/header';
+import CheckBox from '@react-native-community/checkbox';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
 import firebase from '../../config/Firebase';
 
 const ODetails = ({navigation, route}) => {
@@ -23,20 +26,50 @@ const ODetails = ({navigation, route}) => {
   const [descriptionBaru, setDescriptionBaru] = useState('');
   const [priceBaru, setPriceBaru] = useState('');
 
+  const [bedroomBaru, setBedroomBaru] = useState(false);
+  const [bathroomBaru, setBathroomBaru] = useState(false);
+  const [ACBaru, setACBaru] = useState(false);
+  const [wifiBaru, setWifiBaru] = useState(false);
+
+  const [hasPhoto, setHasPhoto] = useState(false);
+  const [photo, setPhoto] = useState('');
+  const [photoBase64, setPhotoBase64] = useState('');
+
+  const getImage = () => {
+    launchImageLibrary(
+      {maxHeight: 720, maxWidth: 1280, includeBase64: true},
+      res => {
+        if (res.didCancel) {
+          setHasPhoto(false);
+          showMessage({
+            message: 'Upload photo cancel',
+            type: 'default',
+            backgroundColor: '#D9435E',
+            color: 'white',
+          });
+        } else {
+          setPhoto(res.assets[0].uri);
+          setPhotoBase64(res.assets[0].base64);
+          setHasPhoto(true);
+        }
+      },
+    );
+  };
+
   const handleSubmit = () => {
     setStatusModal(false);
     const data = {
-      AC: homestay.AC,
+      AC: ACBaru,
       alamat: alamatBaru,
-      bathroom: homestay.bathroom,
-      bedroom: homestay.bedroom,
+      bathroom: bathroomBaru,
+      bedroom: bedroomBaru,
       description: descriptionBaru,
       location: homestay.location,
       name: namaBaru,
       photo: homestay.photo,
       price: priceBaru,
       status: homestay.status,
-      wifi: homestay.wifi,
+      wifi: wifiBaru,
     };
     firebase.database().ref(`homestay/${uid}`).set(data);
   };
@@ -112,6 +145,72 @@ const ODetails = ({navigation, route}) => {
               top: 8,
               fontWeight: '600',
             }}>
+            Fasility
+          </Text>
+
+          <View style={styles.fasilitas}>
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Image
+                source={require('../../assets/owner/Doublebed.png')}
+                style={{height: 28, width: 28}}
+              />
+              <Text>Bedroom</Text>
+              <CheckBox
+                disabled={false}
+                value={bedroomBaru}
+                onValueChange={newValue => setBedroomBaru(newValue)}
+              />
+            </View>
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Image
+                source={require('../../assets/owner/bathtub.png')}
+                style={{height: 28, width: 28}}
+              />
+              <Text>Bathroom</Text>
+              <CheckBox
+                disabled={false}
+                value={bathroomBaru}
+                onValueChange={newValue => setBathroomBaru(newValue)}
+              />
+            </View>
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Image
+                source={require('../../assets/owner/AC.png')}
+                style={{height: 28, width: 28}}
+              />
+              <Text>AC</Text>
+              <CheckBox
+                disabled={false}
+                value={ACBaru}
+                onValueChange={newValue => setACBaru(newValue)}
+              />
+            </View>
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Image
+                source={require('../../assets/owner/wifi.png')}
+                style={{height: 28, width: 28}}
+              />
+              <Text>Wifi</Text>
+              <CheckBox
+                disabled={false}
+                value={wifiBaru}
+                onValueChange={newValue => setWifiBaru(newValue)}
+              />
+            </View>
+          </View>
+
+          {/* <Text
+            style={{
+              left: 10,
+              fontSize: 15,
+              color: 'black',
+              top: 8,
+              fontWeight: '600',
+            }}>
             Description
           </Text>
           <TextInput
@@ -119,7 +218,7 @@ const ODetails = ({navigation, route}) => {
             style={styles.textInput}
             value={descriptionBaru}
             onChangeText={value => setDescriptionBaru(value)}
-          />
+          /> */}
           <Text
             style={{
               left: 10,
@@ -152,15 +251,33 @@ const ODetails = ({navigation, route}) => {
 
         {/* Container */}
         <View>
-          <Image
-            source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
-            style={{
-              width: '100%',
-              height: 271,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-            }}
-          />
+          <TouchableOpacity onPress={getImage}>
+            {hasPhoto && (
+              <Image
+                source={{uri: photo}}
+                style={{
+                  width: '100%',
+                  height: 271,
+                  borderBottomLeftRadius: 20,
+                  borderBottomRightRadius: 20,
+                }}
+              />
+            )}
+            {!hasPhoto && (
+              <Image
+                source={{uri: `data:image/jpeg;base64, ${homestay.photo}`}}
+                style={{
+                  width: '100%',
+                  height: 271,
+                  borderBottomLeftRadius: 20,
+                  borderBottomRightRadius: 20,
+                }}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.Simpan}>
+            <Text style={styles.Simpan1}>Save</Text>
+          </TouchableOpacity>
 
           {/* nama homestay & location */}
           <View
@@ -299,7 +416,7 @@ const ODetails = ({navigation, route}) => {
               }}>
               <Text
                 style={{color: '#38A7D0', fontWeight: 'bold', fontSize: 20}}>
-                IDR{harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                IDR {harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
               </Text>
               <Text style={{fontWeight: 'bold', fontSize: 12, marginTop: 7}}>
                 /Night
@@ -354,12 +471,12 @@ const styles = StyleSheet.create({
   },
   Box: {
     backgroundColor: '#E6E6E6',
-    opacity: 0.9,
-    width: 320,
-    height: 420,
+    // opacity: 0.9,
+    width: '85%',
+    height: '57%',
     borderRadius: 5,
     alignSelf: 'center',
-    top: '10%',
+    top: '15%',
   },
   textInput: {
     // backgroundColor: 'red',
@@ -375,13 +492,36 @@ const styles = StyleSheet.create({
     backgroundColor: '#38A7D0',
     alignSelf: 'center',
     width: '40%',
-    height: '10%',
+    height: '7%',
     bottom: 10,
     borderRadius: 5,
     justifyContent: 'center',
   },
   Save: {
     fontSize: 20,
+    color: 'white',
+    alignSelf: 'center',
+  },
+  fasilitas: {
+    // flexWrap: 'wrap',
+    flexDirection: 'row',
+    marginTop: 39,
+    marginLeft: '9%',
+    marginRight: '9%',
+    // width: '100%',
+    // justifyContent: 'center',
+  },
+  Simpan: {
+    backgroundColor: '#38A7D0',
+    position: 'absolute',
+    right: '5%',
+    top: '35%',
+    borderRadius: 5,
+    width: '20%',
+    height: '5%',
+  },
+  Simpan1: {
+    fontSize: 25,
     color: 'white',
     alignSelf: 'center',
   },
