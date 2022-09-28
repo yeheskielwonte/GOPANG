@@ -49,7 +49,7 @@ const OAddHomestay = ({navigation, route}) => {
 
   const getImage = () => {
     launchImageLibrary(
-      {maxHeight: 200, maxWidth: 200, includeBase64: true},
+      {maxHeight: 720, maxWidth: 1280, includeBase64: true},
       res => {
         if (res.didCancel) {
           setHasPhoto(false);
@@ -95,6 +95,7 @@ const OAddHomestay = ({navigation, route}) => {
         bathroom: Bathroom,
         AC: AC,
         wifi: Wifi,
+        status: 'available',
       };
       firebase.database().ref(`homestay/${uid}`).set(data);
       navigation.navigate('OnavigationBar', {uid: uid});

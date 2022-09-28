@@ -3,8 +3,6 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import ButtonAdd from '../../atoms/buttonAdd';
 
 const CardWarung = props => {
-  console.log('card warung:', props);
-
   return (
     <View
       style={{
@@ -16,44 +14,28 @@ const CardWarung = props => {
         alignItems: 'flex-start',
         padding: 0,
       }}>
-      <Image source={props.image} style={{marginTop: 14, marginBottom: 14}} />
-      <View
+      <Image
+        source={props.image}
         style={{
-          marginLeft: 12,
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-        }}>
+          marginTop: 14,
+          marginBottom: 14,
+          width: 120,
+          height: 88,
+          borderRadius: 20,
+        }}
+      />
+
+      <View style={{marginTop: 20, marginLeft: 20}}>
+        <Text style={{fontSize: 13, fontWeight: 'bold'}}>{props.title}</Text>
+        <Text style={{marginTop: 6, fontSize: 13}}>IDR. {props.harga}</Text>
         <View
           style={{
-            height: 60,
             flexDirection: 'column',
+            marginTop: '7%',
+            marginLeft: '-15%',
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View style={styles.containerTitle}>
-              <Text style={styles.namaMakanan}>{props.title}</Text>
-            </View>
-          </View>
-
-          <View style={{flexDirection: 'row', marginLeft: 11}}>
-            <Text style={styles.harga}>{props.harga}</Text>
-          </View>
           <ButtonAdd />
         </View>
-        <View
-          style={{
-            width: 110,
-            height: 14,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginTop: 29,
-            marginLeft: 11,
-          }}></View>
       </View>
     </View>
   );
@@ -66,12 +48,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     height: 30,
+    marginTop: 5,
   },
   harga: {
     fontWeight: 'normal',
     fontSize: 15,
     width: 187,
     height: 25,
+    marginTop: 5,
   },
   location: {
     flexDirection: 'row',

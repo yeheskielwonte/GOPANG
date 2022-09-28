@@ -30,6 +30,8 @@ const OverviewPage = ({navigation, route}) => {
       IDpenyewa: uid,
       emailPenyewa: users.email,
       phonePenyewa: users.number,
+      noHandphoneOwner: userss.number,
+      namaOwner: userss.name,
       alamatHomestay: homestay.alamat,
       fotoHomestay: homestay.photo,
       harga: homestay.price,
