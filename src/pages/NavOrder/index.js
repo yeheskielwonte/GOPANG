@@ -1,13 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
 import Header from '../../components/molecules/header';
 import TabOrder from '../../components/molecules/TabOrder';
-import React, {useState, useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import {useWindowDimensions, StatusBar} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import firebase from '../../config/Firebase';
 import HCardTransaksi from '../../components/molecules/HCardTransaksi';
 
-const NavOrder = ({navigation, route}) => {
+const NavOrder = ({navigation,route}) => {
   const {uid} = route.params;
   const layout = useWindowDimensions();
 
@@ -20,6 +20,7 @@ const NavOrder = ({navigation, route}) => {
   const FirstRoute = () => {
     const [transaksi, setTransaksi] = useState([]);
 
+    
     useEffect(() => {
       firebase
         .database()
@@ -41,20 +42,18 @@ const NavOrder = ({navigation, route}) => {
         });
     }, []);
 
-    const handleSubmit = key => {
-      navigation.navigate('TransactionDetailsOrder', {
-        uid: uid,
-        homestayID: key,
-      });
-    };
+    
+  const handleSubmit = key => {
+    navigation.navigate('TD', {uid: uid, homestayID: key});
+  };
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         {/* transaksi
             .filter((item) => item.idPenyewa.includes(uid)) */}
         {transaksi
-          .filter(
-            item => item.IDpenyewa.includes(uid) && item.status !== 'completed',
-          )
+          .filter(item =>item.IDpenyewa.includes(uid) &&
+                         item.status !== 'completed',
+                        )
           .map(key => (
             <HCardTransaksi
               nama={key.namaHomestay}
@@ -72,6 +71,7 @@ const NavOrder = ({navigation, route}) => {
   const SecondRoute = () => {
     const [transaksi, setTransaksi] = useState([]);
 
+    
     useEffect(() => {
       firebase
         .database()
@@ -94,20 +94,17 @@ const NavOrder = ({navigation, route}) => {
     }, []);
 
     const handleSubmit = key => {
-      navigation.navigate('TransactionDetailsOrder  ', {
-        uid: uid,
-        homestayID: key,
-      });
+      navigation.navigate('TD', {uid: uid, homestayID: key});
     };
-
+    
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <Text>History</Text>
-        {transaksi
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <Text>History</Text>
+      {transaksi
           .filter(
             item =>
               item.IDpenyewa.includes(uid) &&
-              item.status !== 'unpaid' &&
+              item.status !== 'unpaid'&&
               item.status !== 'paid',
           )
           .map(key => (
@@ -120,9 +117,11 @@ const NavOrder = ({navigation, route}) => {
               onPress={() => handleSubmit(key.id)}
             />
           ))}
-      </View>
-    );
-  };
+    </View>
+    )
+  }
+    
+    
 
   const renderScene = SceneMap({
     first: FirstRoute,
@@ -141,17 +140,8 @@ const NavOrder = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1}}>
-      <View style={{backgroundColor: 'white'}}>
-        <Text
-          style={{
-            fontSize: 40,
-            alignSelf: 'center',
-            marginTop: 15,
-            color: 'black',
-            fontWeight: 'bold',
-          }}>
-          ORDER
-        </Text>
+      <View style={{backgroundColor:'white'}}>
+        <Text style={{fontSize:40,alignSelf:'center',marginTop:15,color:'black', fontWeight:'bold'}}>ORDER</Text>
       </View>
       <TabView
         renderTabBar={renderTabBar}

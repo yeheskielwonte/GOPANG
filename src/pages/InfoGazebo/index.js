@@ -30,6 +30,7 @@ const InfoGazebo = ({navigation, route}) => {
 
   useEffect(() => {
     getGazebo();
+    console.log(gazebo.ID);
   }, []);
 
   const sendOnWa = () => {
@@ -59,10 +60,7 @@ const InfoGazebo = ({navigation, route}) => {
 
       <View style={{flexDirection: 'row'}}>
         <View>
-          <Image
-            source={{uri: `data:image/jpeg;base64, ${gazebo.photo}`}}
-            style={styles.gambar}
-          />
+          <Image source={{uri: `${gazebo.photo}`}} style={styles.gambar} />
           <View style={{flexDirection: 'row', paddingTop: 12}}>
             <Text style={styles.namaGazebo}>Gazebo Wahyu</Text>
             <Text style={styles.ukuran}>{gazebo.size}</Text>
@@ -134,10 +132,11 @@ export default InfoGazebo;
 
 const styles = StyleSheet.create({
   gambar: {
-    width: 411,
-    height: 270,
+    width: '110%',
+    height: '40%',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+    // backgroundColor: 'red',
   },
   direction: {
     width: 17,

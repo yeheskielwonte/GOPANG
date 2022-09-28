@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import firebase from '../../config/Firebase';
-import FoodCardHome from '../../components/molecules/CardFoodHome';
+import FoodCardHome from '../../components/molecules/FoodCardHome';
 import CardHomestay from '../../components/molecules/CardHomestay';
 
 const HomeMenu = ({navigation, route}) => {

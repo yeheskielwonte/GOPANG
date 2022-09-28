@@ -130,7 +130,7 @@ const OverviewPage = ({navigation, route}) => {
                 fontWeight: 'bold',
                 marginTop: 8,
               }}>
-              Number : {userss.number}
+              {userss.number}
             </Text>
           </View>
           <Image
@@ -311,7 +311,7 @@ const OverviewPage = ({navigation, route}) => {
         </View>
 
         <ButtonTransaction
-          title={'Confirm'}
+          title={'Pay'}
           btnView={styles.btnView}
           onPress={() => handleSubmit()}
         />

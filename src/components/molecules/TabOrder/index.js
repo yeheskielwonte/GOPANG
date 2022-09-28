@@ -1,15 +1,14 @@
-import * as React from 'react';
+import React,{useState,useEffect} from 'react';
 import {View, useWindowDimensions, StatusBar, Text} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import TabOrderOngoing from '../TabOrder2';
 import TabOrderHistory from '../TabOder3';
 import firebase from '../../../config/Firebase';
+import HCardTransaksi from '../HCardTransaksi';
 
-const TabOrder = props => {
+const TabOrder = ({uid,navigation}) => {
   const layout = useWindowDimensions();
-  const {uid, navigation} = props;
-  // console.log('nav : ', navigation);
-  // console.log('props di taborder 1:', props);
+
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'first', title: 'Ongoing'},
@@ -17,10 +16,56 @@ const TabOrder = props => {
   ]);
 
   const FirstRoute = () => {
-    console.log('ini uid di tabOrder', uid);
+    const [transaksi, setTransaksi] = useState([]);
+
+    
+    useEffect(() => {
+      firebase
+        .database()
+        .ref(`transaksi`)
+        .on('value', res => {
+          if (res.val()) {
+            //ubah menjadi array object
+            const rawData = res.val();
+            const productArray = [];
+            // console.log(keranjang[0].namaProduk);
+            Object.keys(rawData).map(key => {
+              productArray.push({
+                id: key,
+                ...rawData[key],
+              });
+            });
+            setTransaksi(productArray);
+          }
+        });
+    }, []);
+
+    
+  const handleSubmit = key => {
+    navigation.navigate('TransactionDetails', {uid: uid, homestayID: key});
+  };
+
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <TabOrderOngoing uid={uid} style={{flex: 1}} navigation={navigation} />
+        {/* transaksi
+            .filter((item) => item.idPenyewa.includes(uid)) */}
+        {transaksi
+          .filter(
+            item =>
+              item.IDpenyewa.includes(uid) &&
+              item.status !== 'completed' &&
+              item.kategori.includes('homestay'),
+          )
+          .map(key => (
+            <HCardTransaksi
+              nama={key.namaHomestay}
+              alamat={key.alamatHomestay}
+              harga={key.total}
+              status={key.status}
+              photo={key.fotoHomestay}
+              onPress={() => handleSubmit(key)}
+            />
+          ))}
       </View>
     );
   };

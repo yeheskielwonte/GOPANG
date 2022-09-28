@@ -18,6 +18,7 @@ const MenuGazebo = ({navigation, route}) => {
 
   const handleSubmit = key => {
     navigation.navigate('InfoGazebo', {uid: uid, gazeboID: key});
+    console.log('ini gazebo', uid);
   };
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const MenuGazebo = ({navigation, route}) => {
           //ubah menjadi array object
           const rawData = res.val();
           const productArray = [];
-          // console.log(keranjang[0].namaProduk);
+
           Object.keys(rawData).map(key => {
             productArray.push({
               id: key,
@@ -37,6 +38,7 @@ const MenuGazebo = ({navigation, route}) => {
             });
           });
           setPictures(productArray);
+          // console.log(productArray);
         }
       });
   }, []);
@@ -44,11 +46,11 @@ const MenuGazebo = ({navigation, route}) => {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* Header */}
-      <Header title="Gazebo Available" onBack={() => navigation.goBack()} />
+      <Header title="Gazebo" onBack={() => navigation.goBack()} />
       <View style={{backgroundColor: 'white'}} />
 
       {/* Search */}
-      <View style={styles.elevation}>
+      {/* <View style={styles.elevation}>
         <View style={styles.searchBox}>
           <TextInput placeholder="Search Gazebo you want..." />
           <Image
@@ -56,9 +58,12 @@ const MenuGazebo = ({navigation, route}) => {
             style={styles.search}
           />
         </View>
-      </View>
+      </View> */}
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{top: '-18%'}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{top: '-18%'}}
+        style={styles.elevation}>
         {/* Gazebo 1 */}
         {pictures.map(key => (
           <CardGazebo
@@ -66,7 +71,7 @@ const MenuGazebo = ({navigation, route}) => {
             location={key.location}
             image={`${key.photo}`}
             size={key.size}
-            onPress={() => handleSubmit(key.id, {uid})}
+            onPress={() => handleSubmit(key.id)}
           />
         ))}
       </ScrollView>
@@ -79,7 +84,7 @@ export default MenuGazebo;
 const styles = StyleSheet.create({
   elevation: {
     paddingBottom: 8,
-    paddingLeft: 20,
+    // paddingLeft: 20,
   },
   searchBox: {
     width: '95%',

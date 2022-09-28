@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import Header from '../../components/molecules/header';
 import firebase from '../../config/Firebase';
+import StarRating from 'react-native-star-rating-widget';
 
 const OwnerMenu = ({navigation, route}) => {
   const {uid} = route.params;
@@ -9,6 +10,8 @@ const OwnerMenu = ({navigation, route}) => {
   const [warung, setWarung] = useState({});
   const [isHomestay, setIsHomestay] = useState(false);
   const [isWarung, setIsWarung] = useState(false);
+
+  const [rating, setRating] = useState(0);
 
   const getHomestay = () => {
     firebase
@@ -90,7 +93,7 @@ const OwnerMenu = ({navigation, route}) => {
       <View style={{marginTop: 20}}>
         {isWarung === false && (
           <TouchableOpacity
-            onPress={() => navigation.navigate('AddWarung', {uid: uid})}>
+            onPress={() => navigation.navigate('OAddWarung', {uid: uid})}>
             <Image
               source={require('../../assets/owner/ButtonAddFood.png')}
               style={{margin: 20, width: 345, height: 170}}
@@ -101,7 +104,7 @@ const OwnerMenu = ({navigation, route}) => {
         {isWarung === true && (
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Warung', {uid: uid})}>
+              onPress={() => navigation.navigate('OWarung', {uid: uid})}>
               <Image
                 style={{
                   width: 347,
@@ -115,6 +118,7 @@ const OwnerMenu = ({navigation, route}) => {
           </View>
         )}
       </View>
+      <StarRating rating={rating} onChange={setRating} />
     </View>
   );
 };

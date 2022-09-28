@@ -23,22 +23,22 @@ const Tabs = ({navigation, route}) => {
           backgroundColor: 'white',
           elevation: 0,
           height: 55,
-          width: '60%',
-          marginLeft: '20%',
-          position: 'absolute',
-          marginBottom: 18,
-          shadowColor: '#000',
+          width:'60%',
+          marginLeft:'20%',
+          position:'absolute',
+          marginBottom:18,
+          shadowColor:'#000',
           shadowOffset: {
             width: 0,
             height: 2,
           },
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
-
+          
           elevation: 5,
           paddingBottom: 20,
           paddingHorizontal: 10,
-          borderRadius: 50,
+          borderRadius:50
         },
         tabBarLabelStyle: {
           fontSize: 14,

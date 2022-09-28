@@ -2,24 +2,28 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import ButtonDetails from '../../atoms/buttonDetails';
 
-const CardGazebo = props => {
+const CardHomestay = props => {
   return (
     <View
       style={{
         height: 118,
-        width: 371,
+        width: '90.2%',
         marginLeft: 20,
         marginRight: 20,
         flexDirection: 'row',
         alignItems: 'flex-start',
         padding: 0,
-        borderBottomColor: '#464646',
-        borderBottomWidth: 1,
       }}>
-      <View>
-        <Image source={{uri: `${props.image}`}} style={styles.Imagee} />
-      </View>
-
+      <Image
+        source={{uri: `data:image/jpeg;base64, ${props.image}`}}
+        style={{
+          marginTop: 14,
+          marginBottom: 14,
+          width: 80,
+          height: 90,
+          borderRadius: 10,
+        }}
+      />
       <View
         style={{
           marginLeft: 12,
@@ -49,27 +53,29 @@ const CardGazebo = props => {
         <View
           style={{
             width: 110,
-            height: 20,
+            height: 14,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             marginTop: 29,
             marginLeft: 11,
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: 12}}>
-            Size: {props.size}
-          </Text>
-
-          <View style={styles.button}>
-            <ButtonDetails onSubmit={props.onPress} />
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{color: '#38A7D0', fontWeight: 'bold', fontSize: 12}}>
+              IDR 200.000
+            </Text>
+            <Text style={{fontWeight: 'bold', fontSize: 10, marginTop: 1}}>
+              /Night
+            </Text>
           </View>
+          <ButtonDetails onSubmit={props.onPress} />
         </View>
       </View>
     </View>
   );
 };
 
-export default CardGazebo;
+export default CardHomestay;
 
 const styles = StyleSheet.create({
   wahyu: {
@@ -90,17 +96,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: 11,
     marginRight: 55,
-  },
-  button: {
-    position: 'absolute',
-    marginLeft: '77%',
-  },
-  Imagee: {
-    width: 80,
-    height: 87,
-    marginTop: 14,
-    marginBottom: 14,
-    borderRadius: 10,
-    backgroundColor: 'red',
   },
 });

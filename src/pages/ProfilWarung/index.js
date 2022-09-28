@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,10 +11,11 @@ import {
 import Header from '../../components/molecules/header';
 import CardWarung from '../../components/molecules/CardWarung';
 import firebase from 'firebase';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
-const ProfilWarung = ({navigation, route}) => {
-  const {uid, WarungID} = route.params;
+
+const ProfilWarung = ({navigation,route}) => {
+  const {uid,WarungID} = route.params;
   const [onWarung, setOnWarung] = useState([]);
   const [onFood, setOnFood] = useState([]);
 
@@ -29,7 +30,7 @@ const ProfilWarung = ({navigation, route}) => {
         }
       });
   };
-
+  
   const getFood = () => {
     firebase
       .database()
@@ -51,10 +52,10 @@ const ProfilWarung = ({navigation, route}) => {
       });
   };
 
-  useEffect(() => {
+  useEffect(()=>{
     getWarung();
     getFood();
-  }, []);
+  },[]);
 
   return (
     <View>
@@ -84,16 +85,14 @@ const ProfilWarung = ({navigation, route}) => {
 
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.NamaWarung}>Warung {onWarung.name}</Text>
-          <View style={{marginTop: 17, marginLeft: '53%'}}>
+          <View style={{marginTop: 17, marginLeft: 95}}>
             <Image source={require('../../assets/icon/ratingfood.png')} />
           </View>
         </View>
 
         <View style={{flexDirection: 'row', marginLeft: 31, marginTop: 9}}>
           <Image source={require('../../assets/icon/pinMap.png')} />
-          <Text style={{marginLeft: 15, fontSize: 14}}>
-            Desa {onWarung.alamat}
-          </Text>
+          <Text style={{marginLeft: 15, fontSize: 14}}>Desa {onWarung.alamat}</Text>
         </View>
 
         <View style={{flexDirection: 'row', marginLeft: 31, marginTop: 6}}>
@@ -108,16 +107,16 @@ const ProfilWarung = ({navigation, route}) => {
           Popular Items
         </Text>
 
-        <View style={{marginBottom: 90}}>
+        <View style={{marginBottom:90}}>
           {onFood.map(key => (
-            <View style={{flexDirection: 'row'}}>
-              <CardWarung
-                title={key.name}
-                harga={key.price}
-                image={`${key.photo}`}
-              />
-            </View>
-          ))}
+              <View style={{flexDirection: 'row'}}>
+                <CardWarung
+                  title={key.name}
+                  harga={key.price}
+                  image={{uri: `data:image/jpeg;base64, ${key.photo}`}}
+                />
+              </View>
+            ))}
         </View>
       </ScrollView>
     </View>

@@ -11,11 +11,16 @@ import Header from '../../components/molecules/header';
 import firebase from '../../config/Firebase';
 import Loading from '../../components/molecules/Loading';
 
+import Button from '../../components/atoms/Button';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 const MenuGazebo = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
   const [homestay, setHomestay] = useState({});
   const [harga, setHarga] = useState('');
   const [status, setStatus] = useState('');
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [Date, setDate] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -58,6 +63,14 @@ const MenuGazebo = ({navigation, route}) => {
   useEffect(() => {
     getHomestay();
   }, []);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
   return (
     <>
@@ -194,54 +207,16 @@ const MenuGazebo = ({navigation, route}) => {
 
             {/* Check in/out */}
             <View style={{marginLeft: 37, marginTop: 22}}>
-              <Text
-                style={{marginBottom: 6.37, fontSize: 14, color: '#38A7D0'}}>
-                Check-in
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: '#F9F9F9',
-                  height: 40.54,
-                  marginRight: 121,
-                }}>
-                <Image
-                  source={require('../../assets/icon/Kalender.png')}
-                  style={{marginLeft: 13.18}}
+              <View>
+                <Button title={'Check in'} onPress={showDatePicker} />
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onCancel={hideDatePicker}
+                  onChange={value => setDate(value)}
                 />
-                <Text style={{fontSize: 18, marginLeft: 5}}>
-                  Sunday, 6 February 2022
-                </Text>
+                <Text>{Date}</Text>
               </View>
-
-              <Text
-                style={{
-                  marginBottom: 6.37,
-                  marginTop: 15.68,
-                  fontSize: 14,
-                  color: '#38A7D0',
-                }}>
-                Check-out
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: '#F9F9F9',
-                  height: 40.54,
-                  marginRight: 121,
-                }}>
-                <Image
-                  source={require('../../assets/icon/Kalender.png')}
-                  style={{marginLeft: 13.18}}
-                />
-                <Text style={{fontSize: 18, marginLeft: 5}}>
-                  Monday, 7 February 2022
-                </Text>
-              </View>
-              <Text style={{fontSize: 12}}>Max.31 Days</Text>
-              <Text style={{fontSize: 18, marginTop: 7.34}}>1 Malam</Text>
 
               <View
                 style={{

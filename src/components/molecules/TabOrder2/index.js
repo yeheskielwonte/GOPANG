@@ -6,15 +6,13 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import HCardTransaksi from '../HCardTransaksi';
 import firebase from '../../../config/Firebase';
+import infoHomestay from '../../../pages/infoHomestay';
 
-const TabOrderr = ({navigation, route}) => {
-  const {uid} = route.params;
-  console.log('props di tab 2, navigation :', navigation);
+const TabOrderr = ({navigation,uid}) => {
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
@@ -23,13 +21,11 @@ const TabOrderr = ({navigation, route}) => {
     {key: 'second', title: 'Food'},
   ]);
 
-  const onPressCard = () => {
-    console.log('sdfsdfj');
-  };
 
   const FirstRoute = () => {
-    console.log('ini uid taborder2', uid);
     const [transaksi, setTransaksi] = useState([]);
+
+    
     useEffect(() => {
       firebase
         .database()
@@ -50,29 +46,33 @@ const TabOrderr = ({navigation, route}) => {
           }
         });
     }, []);
+
+    
+  const handleSubmit = key => {
+    navigation.navigate('TransactionDetails', {uid: uid, homestayID: key});
+  };
+
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <ScrollView>
-          {/* transaksi
+        {/* transaksi
             .filter((item) => item.idPenyewa.includes(uid)) */}
-          {transaksi
-            .filter(
-              item =>
-                item.IDpenyewa.includes(uid) &&
-                item.status !== 'completed' &&
-                item.kategori.includes('homestay'),
-            )
-            .map(key => (
-              <HCardTransaksi
-                nama={key.namaHomestay}
-                alamat={key.alamatHomestay}
-                harga={key.total}
-                status={key.status}
-                photo={key.fotoHomestay}
-                navigation={navigation}
-              />
-            ))}
-        </ScrollView>
+        {transaksi
+          .filter(
+            item =>
+              item.IDpenyewa.includes(uid) &&
+              item.status !== 'completed' &&
+              item.kategori.includes('homestay'),
+          )
+          .map(key => (
+            <HCardTransaksi
+              nama={key.namaHomestay}
+              alamat={key.alamatHomestay}
+              harga={key.total}
+              status={key.status}
+              photo={key.fotoHomestay}
+              onPress={() => handleSubmit(key)}
+            />
+          ))}
       </View>
     );
   };

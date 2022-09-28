@@ -141,7 +141,7 @@ const Warung = ({navigation, route}) => {
             Add Food
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('AddFood', {uid})}
+            onPress={() => navigation.navigate('OAddFood', {uid})}
             style={styles.addFood}>
             <Image
               source={require('../../assets/warung/AddFood.png')}
