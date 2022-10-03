@@ -151,8 +151,8 @@ const HomeMenu = ({navigation, route}) => {
             <View>
               {pictures
                 .filter(homestay => homestay.location.includes(locationPaal))
-                .map(key => (
-                  <View>
+                .map((key,index) => (
+                  <View key={index}>
                     <CardHomestay
                       title={key.name}
                       image={`${key.photo}`}
@@ -320,8 +320,8 @@ const HomeMenu = ({navigation, route}) => {
         </Text>
         <View style={styles.restaurant}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {onWarung.map(key => (
-              <View style={{flexDirection: 'row'}}>
+            {onWarung.map((key,index) => (
+              <View style={{flexDirection: 'row'}} key={index}>
                 <FoodCardHome
                   name={key.name}
                   location={key.alamat}
