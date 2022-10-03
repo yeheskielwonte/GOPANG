@@ -121,7 +121,7 @@ const HomeMenu = ({navigation, route}) => {
             justifyContent: 'space-between',
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MenuHomestay')}
+            onPress={() => navigation.navigate('MenuHomestay', {uid: uid})}
             style={{
               width: '60%',
               alignItems: 'center',
@@ -132,7 +132,7 @@ const HomeMenu = ({navigation, route}) => {
             <Text style={{fontSize: 15, textAlign: 'center'}}>Homestay</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MenuGazebo', {uid})}
+            onPress={() => navigation.navigate('MenuGazebo', {uid: uid})}
             style={{
               width: '60%',
               alignItems: 'center',
@@ -182,7 +182,7 @@ const HomeMenu = ({navigation, route}) => {
         <View style={styles.Gdestination}>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('OptionMenuPaal')}
+              onPress={() => navigation.navigate('OptionMenuPaal', {uid: uid})}
               activeOpacity={0.8}>
               <Image
                 source={require('../../assets/pantai/Paal/Paal4.png')}
@@ -212,7 +212,9 @@ const HomeMenu = ({navigation, route}) => {
           </View>
           <View style={{marginLeft: 20}}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('OptionMenuPulisan')}
+              onPress={() =>
+                navigation.navigate('OptionMenuPulisan', {uid: uid})
+              }
               activeOpacity={0.8}>
               <Image
                 source={require('../../assets/pantai/Pulisan/Pulisan5.jpg')}
@@ -242,7 +244,9 @@ const HomeMenu = ({navigation, route}) => {
           </View>
           <View style={{marginTop: 25}}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('OptionMenuKinunang')}
+              onPress={() =>
+                navigation.navigate('OptionMenuKinunang', {uid: uid})
+              }
               activeOpacity={0.8}>
               <Image
                 source={require('../../assets/pantai/Kinunang/Kinunang1.jpg')}
@@ -272,7 +276,9 @@ const HomeMenu = ({navigation, route}) => {
           </View>
           <View style={{marginLeft: 20, marginTop: 25}}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('OptionMenuLarata')}
+              onPress={() =>
+                navigation.navigate('OptionMenuLarata', {uid: uid})
+              }
               activeOpacity={0.8}>
               <Image
                 source={require('../../assets/pantai/Larata/Larata1.jpg')}

@@ -13,7 +13,7 @@ import Input from '../../components/atoms/Input';
 import firebase from '../../config/Firebase';
 
 const MenuHomestay = ({navigation, route}) => {
-  const uid = route.params;
+  const {uid} = route.params;
   const [pictures, setPictures] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -63,7 +63,7 @@ const MenuHomestay = ({navigation, route}) => {
             {/* Filter */}
             <View style={{marginLeft: 6, marginTop: 12}}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Filter',{uid: uid})}
+                onPress={() => navigation.navigate('Filter', {uid: uid})}
                 style={{
                   width: 63,
                   height: 24,
@@ -90,7 +90,9 @@ const MenuHomestay = ({navigation, route}) => {
                           title={key.name}
                           image={`${key.photo}`}
                           location={key.location}
-                          price={key.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                          price={key.price
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                           status={`${key.status}`}
                           onPress={() => handleSubmit(key.id)}
                         />
@@ -100,9 +102,8 @@ const MenuHomestay = ({navigation, route}) => {
               </View>
             ) : (
               pictures
-                .filter(
-                  homestay =>
-                    homestay.name.toLowerCase().includes(search.toLowerCase()),
+                .filter(homestay =>
+                  homestay.name.toLowerCase().includes(search.toLowerCase()),
                 )
                 .map(key => (
                   <View>
@@ -110,7 +111,9 @@ const MenuHomestay = ({navigation, route}) => {
                       title={key.name}
                       image={`${key.photo}`}
                       location={key.location}
-                      price={key.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                      price={key.price
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       status={`${key.status}`}
                       onPress={() => handleSubmit(key.id)}
                     />

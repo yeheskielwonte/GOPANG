@@ -37,6 +37,7 @@ const OverviewPage = ({navigation, route}) => {
       harga: homestay.price,
       total: homestay.price,
       kategori: 'homestay',
+      time: 86400,
     };
 
     firebase.database().ref(`transaksi`).push(data);
