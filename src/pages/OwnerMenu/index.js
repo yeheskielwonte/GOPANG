@@ -118,7 +118,11 @@ const OwnerMenu = ({navigation, route}) => {
           </View>
         )}
       </View>
-      <StarRating rating={rating} onChange={setRating} />
+      <StarRating
+        rating={rating}
+        onChange={setRating}
+        style={{alignSelf: 'center', top: '10%'}}
+      />
     </View>
   );
 };

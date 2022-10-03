@@ -8,12 +8,13 @@ import {
   Touchable,
   TouchableHighlight,
   Alert,
+  Linking,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Header from '../../components/molecules/header';
 import ButtonTransaction from '../../components/atoms/ButtonTransaction';
 import firebase from '../../config/Firebase';
-import CountDown from 'react-native-countdown-component';
+import CountDown from '@ilterugur/react-native-countdown-component';
 import ButtonChat from '../../components/atoms/ButtonChat';
 
 const TransactionDetails = ({navigation, route}) => {
@@ -45,7 +46,6 @@ const TransactionDetails = ({navigation, route}) => {
   useEffect(() => {
     getHomestay();
   }, []);
-
 
   const getUser = () => {
     firebase
@@ -84,6 +84,23 @@ const TransactionDetails = ({navigation, route}) => {
   useEffect(() => {
     getUserr();
   }, []);
+
+  const sendOnWa = () => {
+    let mobile = userss.number;
+    if (mobile) {
+      // Kode negara 62 = Indonesia
+      let url = 'whatsapp://send?text=' + '&phone=62' + userss.number;
+      Linking.openURL(url)
+        .then(data => {
+          console.log('WhatsApp Opened');
+        })
+        .catch(() => {
+          alert('Make sure Whatsapp installed on your device');
+        });
+    } else {
+      alert('Nomor telepon pembeli tidak terdaftar di Whatsapp.');
+    }
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -224,7 +241,7 @@ const TransactionDetails = ({navigation, route}) => {
           flexDirection: 'row',
         }}>
         <CountDown
-          until={2400000}
+          until={86400}
           digitStyle={{backgroundColor: 'white'}}
           onFinish={() => alert('finished')}
           // onPress={() => alert('hello')}
@@ -242,10 +259,7 @@ const TransactionDetails = ({navigation, route}) => {
         }}
       />
 
-      <ButtonChat
-        title="Chat Owner"
-        onPress={() => navigation.navigate('Chat', uid)}
-      />
+      <ButtonChat title="Chat" onPress={() => sendOnWa()} />
 
       <View
         style={{

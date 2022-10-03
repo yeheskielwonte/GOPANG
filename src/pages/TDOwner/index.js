@@ -5,11 +5,10 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  TouchableOpacity,
+  Touchable,
   TouchableHighlight,
   Alert,
   Linking,
-  Modal,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Header from '../../components/molecules/header';
@@ -17,20 +16,13 @@ import ButtonTransaction from '../../components/atoms/ButtonTransaction';
 import firebase from '../../config/Firebase';
 import CountDown from '@ilterugur/react-native-countdown-component';
 import ButtonChat from '../../components/atoms/ButtonChat';
-import Ratings from '../../components/molecules/CardRating';
-import StarRating from 'react-native-star-rating-widget';
 
-const TransactionDetails = ({navigation, route}) => {
+const TDOwner = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
   const [transaksi, setTransaksi] = useState({});
   const [users, setUsers] = useState({});
-  const [ratingModal, setRatingModal] = useState(false);
-  const [rating, setRating] = useState(0);
-  console.log(rating);
-  // const time = Number(transaksi.time);
-  const [time, setTime] = useState(transaksi.time);
-  // console.log(typeof transaksi.time);
-  // console.log(transaksi);
+  const [userss, setUserss] = useState({});
+
   const getTransaksi = () => {
     firebase
 
@@ -39,38 +31,20 @@ const TransactionDetails = ({navigation, route}) => {
       .on('value', res => {
         if (res.val()) {
           setTransaksi(res.val());
-          // setTime(res.val().time);
           //   setHarga(res.val().price);
         }
       });
   };
 
-  const getUser = () => {
-    firebase
-
-      .database()
-      .ref(`users/pelanggan/${uid}`)
-      .on('value', res => {
-        if (res.val()) {
-          setUsers(res.val());
-          //   setOnPhoto(true);
-          // console.log(users.photo);
-        }
-        //   console.log('ini user', users);
-      });
-  };
-
   useEffect(() => {
-    getUser();
     getTransaksi();
   }, []);
 
   const sendOnWa = () => {
-    let mobile = transaksi.noHandphoneOwner;
+    let mobile = transaksi.phonePenyewa;
     if (mobile) {
       // Kode negara 62 = Indonesia
-      let url =
-        'whatsapp://send?text=' + '&phone=62' + transaksi.noHandphoneOwner;
+      let url = 'whatsapp://send?text=' + '&phone=62' + transaksi.phonePenyewa;
       Linking.openURL(url)
         .then(data => {
           console.log('WhatsApp Opened');
@@ -85,20 +59,6 @@ const TransactionDetails = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <Modal visible={ratingModal} transparent animationType="slide">
-        <TouchableOpacity
-          style={{
-            height: '100%',
-            width: '100%',
-            position: 'absolute',
-          }}
-          onPress={() => setRatingModal(false)}
-        />
-        <View style={styles.Box}>
-          <StarRating rating={rating} onChange={setRating} />
-        </View>
-      </Modal>
-
       <Header title="Transaction" />
 
       <View style={{flexDirection: 'row'}}>
@@ -158,21 +118,21 @@ const TransactionDetails = ({navigation, route}) => {
             fontSize: 15,
             fontWeight: 'bold',
           }}>
-          {users.name}
+          {transaksi.namaPenyewa}
         </Text>
         <Text
           style={{
             fontSize: 15,
             marginTop: 12,
           }}>
-          {users.email}
+          {transaksi.emailPenyewa}
         </Text>
         <Text
           style={{
             fontSize: 15,
             marginTop: 12,
           }}>
-          {users.number}
+          {transaksi.phonePenyewa}
         </Text>
       </View>
 
@@ -238,7 +198,7 @@ const TransactionDetails = ({navigation, route}) => {
           flexDirection: 'row',
         }}>
         <CountDown
-          until={transaksi.time}
+          until={2400000}
           digitStyle={{backgroundColor: 'white'}}
           onFinish={() => alert('finished')}
           // onPress={() => alert('hello')}
@@ -256,7 +216,7 @@ const TransactionDetails = ({navigation, route}) => {
         }}
       />
 
-      <ButtonChat title="Chat Owner" onPress={() => sendOnWa()} />
+      <ButtonChat title="Chat Customer" onPress={() => sendOnWa()} />
 
       <View
         style={{
@@ -275,10 +235,6 @@ const TransactionDetails = ({navigation, route}) => {
             btnView={styles.btnView}
             onPress={() => navigation.replace('NavigationBar', {uid: uid})}
           />
-          <ButtonTransaction
-            title={'Rating'}
-            onPress={() => setRatingModal(true)}
-          />
         </View>
         <View style={{marginLeft: '10%', marginTop: 10}}>
           <Image
@@ -294,21 +250,12 @@ const TransactionDetails = ({navigation, route}) => {
   );
 };
 
-export default TransactionDetails;
+export default TDOwner;
 
 const styles = StyleSheet.create({
   btnView: {
     marginTop: '20%',
     marginBottom: 57.69,
     alignItems: 'center',
-  },
-  Box: {
-    backgroundColor: '#E6E6E6',
-    // opacity: 0.9,
-    width: '85%',
-    height: '57%',
-    borderRadius: 5,
-    alignSelf: 'center',
-    top: '15%',
   },
 });
