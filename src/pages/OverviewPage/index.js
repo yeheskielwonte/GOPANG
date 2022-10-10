@@ -10,9 +10,10 @@ import {
 import Header from '../../components/molecules/header';
 import ButtonTransaction from '../../components/atoms/ButtonTransaction';
 import firebase from '../../config/Firebase';
+const dayjs = require('dayjs');
 
 const OverviewPage = ({navigation, route}) => {
-  const {uid, homestayID} = route.params;
+  const {uid, homestayID, checkInDate, checkOutDate} = route.params;
   const [homestay, setHomestay] = useState({});
   const [harga, setHarga] = useState('');
 
@@ -38,6 +39,8 @@ const OverviewPage = ({navigation, route}) => {
       total: homestay.price,
       kategori: 'homestay',
       time: 86400,
+      checkin: checkInDate,
+      checkout: checkOutDate,
     };
 
     firebase.database().ref(`transaksi`).push(data);
@@ -209,7 +212,7 @@ const OverviewPage = ({navigation, route}) => {
               fontSize: 15,
               marginRight: 20,
             }}>
-            Sun Feb 6 2022
+            {dayjs(checkInDate).format('dddd, DD MMMM YYYY')}
           </Text>
         </View>
 
@@ -241,7 +244,7 @@ const OverviewPage = ({navigation, route}) => {
               fontSize: 15,
               marginRight: 20,
             }}>
-            Mon Feb 07 2022
+            {dayjs(checkOutDate).format('dddd, DD MMMM YYYY')}
           </Text>
         </View>
 
@@ -273,7 +276,9 @@ const OverviewPage = ({navigation, route}) => {
               fontSize: 15,
               marginRight: 20,
             }}>
-            1 Night
+            {checkInDate && checkOutDate
+              ? `${dayjs(checkOutDate).diff(dayjs(checkInDate), 'day')} Night`
+              : 'Please add a check-in and check-out date'}
           </Text>
         </View>
 
