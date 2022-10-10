@@ -22,10 +22,10 @@ const MenuGazebo = ({navigation, route}) => {
   const [harga, setHarga] = useState('');
   const [status, setStatus] = useState('');
   // const [Date, setDate] = useState('');
-    const [checkInDate, setCheckInDate] = useState(null)
-    const [checkOutDate, setCheckOutDate] = useState(null)
-    const [showDatePicker, setShowDatePicker] = useState(false)
-    const [currentDatePickerContext, setCurrentDatePickerContext] = useState('')
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [currentDatePickerContext, setCurrentDatePickerContext] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +47,12 @@ const MenuGazebo = ({navigation, route}) => {
     firebase.database().ref(`homestay/${homestayID}`).set(data);
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate('OverviewPage', {uid: uid, homestayID: homestayID});
+      navigation.navigate('OverviewPage', {
+        uid: uid,
+        homestayID: homestayID,
+        checkInDate: checkInDate.toString(),
+        checkOutDate: checkOutDate.toString(),
+      });
     }, 2000);
   };
 
@@ -69,8 +74,7 @@ const MenuGazebo = ({navigation, route}) => {
     getHomestay();
   }, []);
 
-  const toggleDatePicker = isVisible =>
-    setShowDatePicker(isVisible)
+  const toggleDatePicker = isVisible => setShowDatePicker(isVisible);
 
   return (
     <>
@@ -208,53 +212,68 @@ const MenuGazebo = ({navigation, route}) => {
             {/* Check in/out */}
             <View style={{marginLeft: '4.8%', marginTop: 22}}>
               <View>
-              {
+                {[
                   [
-                      ['Check-in', () => {
-                          toggleDatePicker(true)
-                          setCurrentDatePickerContext('checkIn')
-                      }, checkInDate],
-                      ['Check-out', () => {
-                          toggleDatePicker(true)
-                          setCurrentDatePickerContext('checkOut')
-                      }, checkOutDate],
-                  ].map((el, idx) =>
-                      <View key={idx} style={{marginBottom: 10}}>
-                            <Text style={{
-                                color: '#38A7D0',
-                            }}>
-                                {el[0]}
-                            </Text>
-                            <View style={{
-                                flexDirection: 'row',
-                            }}>
-                                <TouchableOpacity
-                                    style={{
-                                        backgroundColor: 'rgba(0, 0, 0, 0.03)',
-                                        borderBottomWidth: 3,
-                                        borderBottomColor: 'rgba(0, 0, 0, 0.09)',
-                                        borderRadius: 3,
-                                        padding: 5,
-                                    }}
-                                    onPress={el[1]}
-                                >
-                                    <Text>{el[2] ? dayjs(el[2]).format('dddd, DD MMMM YYYY') : `Please add a ${el[0].toLowerCase()} date`}</Text>
-                                </TouchableOpacity>
-                            </View>
-                      </View>
-                  )
-              }
+                    'Check-in',
+                    () => {
+                      toggleDatePicker(true);
+                      setCurrentDatePickerContext('checkIn');
+                    },
+                    checkInDate,
+                  ],
+                  [
+                    'Check-out',
+                    () => {
+                      toggleDatePicker(true);
+                      setCurrentDatePickerContext('checkOut');
+                    },
+                    checkOutDate,
+                  ],
+                ].map((el, idx) => (
+                  <View key={idx} style={{marginBottom: 10}}>
+                    <Text
+                      style={{
+                        color: '#38A7D0',
+                      }}>
+                      {el[0]}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                          borderBottomWidth: 3,
+                          borderBottomColor: 'rgba(0, 0, 0, 0.09)',
+                          borderRadius: 3,
+                          padding: 5,
+                        }}
+                        onPress={el[1]}>
+                        <Text>
+                          {el[2]
+                            ? dayjs(el[2]).format('dddd, DD MMMM YYYY')
+                            : `Please add a ${el[0].toLowerCase()} date`}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
 
-              <Text>
-                  Max. 31 Days
-              </Text>
+                <Text>Max. 31 Days</Text>
 
-              <Text style={{
-                  color: 'black',
-                  fontSize: 18,
-              }}>
-                  {checkInDate && checkOutDate ? `${dayjs(checkOutDate).diff(dayjs(checkInDate), 'day')} malam` : 'Please add a check-in and check-out date'}
-              </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 18,
+                  }}>
+                  {checkInDate && checkOutDate
+                    ? `${dayjs(checkOutDate).diff(
+                        dayjs(checkInDate),
+                        'day',
+                      )} malam`
+                    : 'Please add a check-in and check-out date'}
+                </Text>
               </View>
 
               <View
@@ -288,20 +307,20 @@ const MenuGazebo = ({navigation, route}) => {
           </View>
         </View>
       </ScrollView>
-        <DateTimePickerModal
-            onConfirm={date => {
-                if(currentDatePickerContext === '')
-                    return alert("Internal Error: Date Picker context isn't primed!")
+      <DateTimePickerModal
+        onConfirm={date => {
+          if (currentDatePickerContext === '')
+            return alert("Internal Error: Date Picker context isn't primed!");
 
-                currentDatePickerContext === 'checkIn' ?
-                    setCheckInDate(date) :
-                    setCheckOutDate(date)
+          currentDatePickerContext === 'checkIn'
+            ? setCheckInDate(date)
+            : setCheckOutDate(date);
 
-                toggleDatePicker(false)
-            }}
-            onCancel={() => toggleDatePicker(false)}
-            isVisible={showDatePicker}
-        />
+          toggleDatePicker(false);
+        }}
+        onCancel={() => toggleDatePicker(false)}
+        isVisible={showDatePicker}
+      />
       {loading && <Loading />}
     </>
   );

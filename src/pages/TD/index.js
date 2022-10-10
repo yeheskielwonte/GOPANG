@@ -20,7 +20,8 @@ import CountDown from '@ilterugur/react-native-countdown-component';
 import ButtonChat from '../../components/atoms/ButtonChat';
 import Ratings from '../../components/molecules/CardRating';
 import StarRating from 'react-native-star-rating-widget';
-import dayjs from "dayjs";
+
+const dayjs = require('dayjs');
 
 const TransactionDetails = ({navigation, route}) => {
     const {uid, homestayID} = route.params;
@@ -76,8 +77,8 @@ const TransactionDetails = ({navigation, route}) => {
 
     //quick fix for countdown component not updating
     useEffect(() =>
-        setCountdownComponentForceUpdate(prevState => prevState + 1)
-    , [transaksi?.paymentExpireDateTime])
+            setCountdownComponentForceUpdate(prevState => prevState + 1)
+        , [transaksi?.paymentExpireDateTime])
 
     const sendOnWa = () => {
         let mobile = transaksi.noHandphoneOwner;
@@ -217,101 +218,129 @@ const TransactionDetails = ({navigation, route}) => {
                     </Text>
                 </View>
 
-                <TouchableHighlight
-                    onPress={() => Alert.alert('SuccessPage')}
-                    style={{marginRight: 20}}>
-                    <View style={{flexDirection: 'row'}}>
+                <View
+                    style={{
+                        marginTop: 13,
+                        justifyContent: 'space-between',
+                        marginBottom: 13,
+                        marginLeft: 20,
+                        flexDirection: 'row',
+                    }}>
+                    <View style={{flexDirection: 'row', marginTop: 5}}>
+                        <Text
+                            style={{
+                                fontSize: 15,
+                            }}>
+                            CheckIn
+                        </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginRight: 20}}>
                         <Text
                             style={{
                                 fontSize: 15,
                                 marginTop: 5,
                             }}>
-                            Indomaret
+                            {dayjs(transaksi.checkin).format('dddd, DD MMMM YYYY')}
                         </Text>
-                        <Image source={require('../../assets/icon/ArrowRight.png')}/>
                     </View>
-                </TouchableHighlight>
-            </View>
+                </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 13,
+                        // marginTop: 13, duplicate ?
+                    }}>
+                    <View style={{flexDirection: 'row', marginTop: 5}}>
+                        <Text
+                            style={{
+                                fontSize: 15,
+                            }}>
+                            CheckIn
+                        </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginRight: 20}}>
+                        <Text
+                            style={{
+                                fontSize: 15,
+                                marginTop: 5,
+                            }}>
+                            {dayjs(transaksi.checkin).format('dddd, DD MMMM YYYY')}
+                        </Text>
+                    </View>
+                </View>
 
-            <View
-                style={{
-                    height: 1,
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    width: 371,
-                    alignSelf: 'center',
-                }}
-            />
+                <View
+                    style={{
+                        marginTop: 13,
+                        marginBottom: 13,
+                        justifyContent: 'center',
+                        // marginLeft: 20,
+                        flexDirection: 'row',
+                    }}>
+                    <CountDown
+                        /*
+                        ni react-native-countdown-component untuk sementara ada bug:
+                        ((https://github.com/talalmajali/react-native-countdown-component/issues/102))
 
-            <View
-                style={{
-                    marginTop: 13,
-                    marginBottom: 13,
-                    justifyContent: 'center',
-                    // marginLeft: 20,
-                    flexDirection: 'row',
-                }}>
-                <CountDown
-                    /*
-                    ni react-native-countdown-component untuk sementara ada bug:
-                    ((https://github.com/talalmajali/react-native-countdown-component/issues/102))
+                        Depe countdown nda mo ta update walaupun tu data yang torang
+                        ada passing ke 'until' itu so ta ganti.
 
-                    Depe countdown nda mo ta update walaupun tu data yang torang
-                    ada passing ke 'until' itu so ta ganti.
-
-                    Untuk sementara, depe fix itu torang msti rubah tu prop 'id' tiap kali torang pe
-                    data transaksi berubah, makanya ada tambah state baru yang depe nama 'countdownComponentForceUpdate'
-                    */
-                    id={countdownComponentForceUpdate} //quick fix for countdown component not updating
-                    until={transaksi?.paymentExpireDateTime ? dayjs(transaksi.paymentExpireDateTime).diff(dayjs(), 'second') : 0}
-                    digitStyle={{backgroundColor: 'white'}}
-                    onFinish={() => alert('finished')}
-                    // onPress={() => alert('hello')}
-                    size={15}
-                />
-            </View>
-
-            <View
-                style={{
-                    height: 1,
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    width: 371,
-                    alignSelf: 'center',
-                    bottom: 10,
-                }}
-            />
-
-            <ButtonChat title="Chat Owner" onPress={() => sendOnWa()}/>
-
-            <View
-                style={{
-                    height: 1,
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    width: 371,
-                    alignSelf: 'center',
-                    top: 10,
-                }}
-            />
-
-            <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 40}}>
-                <View>
-                    <ButtonTransaction
-                        title={'Paid'}
-                        btnView={styles.btnView}
-                        onPress={() => navigation.replace('NavigationBar', {uid: uid})}
-                    />
-                    <ButtonTransaction
-                        title={'Rating'}
-                        onPress={() => setRatingModal(true)}
+                        Untuk sementara, depe fix itu torang msti rubah tu prop 'id' tiap kali torang pe
+                        data transaksi berubah, makanya ada tambah state baru yang depe nama 'countdownComponentForceUpdate'
+                        */
+                        id={countdownComponentForceUpdate} //quick fix for countdown component not updating
+                        until={transaksi?.paymentExpireDateTime ? dayjs(transaksi.paymentExpireDateTime).diff(dayjs(), 'second') : 0}
+                        digitStyle={{backgroundColor: 'white'}}
+                        onFinish={() => alert('finished')}
+                        // onPress={() => alert('hello')}
+                        size={15}
                     />
                 </View>
-                <View style={{marginLeft: '10%', marginTop: 10}}>
-                    <Image
-                        style={{width: 80, height: 80, alignSelf: 'center'}}
-                        source={require('../../assets/icon/iconOrderStatus.png')}
-                    />
-                    <Text style={{fontSize: 20, alignSelf: 'center'}}>
-                        {transaksi.status}
-                    </Text>
+
+                <View
+                    style={{
+                        height: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                        width: 371,
+                        alignSelf: 'center',
+                        bottom: 10,
+                    }}
+                />
+
+                <ButtonChat title="Chat Owner" onPress={() => sendOnWa()}/>
+
+                <View
+                    style={{
+                        height: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                        width: 371,
+                        alignSelf: 'center',
+                        top: 10,
+                    }}
+                />
+
+                <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 40}}>
+                    <View>
+                        <ButtonTransaction
+                            title={'Paid'}
+                            btnView={styles.btnView}
+                            onPress={() => navigation.replace('NavigationBar', {uid: uid})}
+                        />
+                        <ButtonTransaction
+                            title={'Rating'}
+                            onPress={() => setRatingModal(true)}
+                        />
+                    </View>
+                    <View style={{marginLeft: '10%', marginTop: 10}}>
+                        <Image
+                            style={{width: 80, height: 80, alignSelf: 'center'}}
+                            source={require('../../assets/icon/iconOrderStatus.png')}
+                        />
+                        <Text style={{fontSize: 20, alignSelf: 'center'}}>
+                            {transaksi.status}
+                        </Text>
+                    </View>
                 </View>
             </View>
         </View>
