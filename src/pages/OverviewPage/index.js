@@ -40,7 +40,7 @@ const OverviewPage = ({navigation, route}) => {
       time: 86400,
     };
 
-    firebase.database().ref(`transaksi`).push(data);
+    firebase.database().ref('transaksi').push(data);
     navigation.navigate('TransactionDetails', {
       uid: uid,
       homestayID: homestayID,
