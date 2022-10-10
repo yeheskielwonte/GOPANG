@@ -11,6 +11,7 @@ import {
 import Header from '../../components/molecules/header';
 import ButtonTransaction from '../../components/atoms/ButtonTransaction';
 import firebase from '../../config/Firebase';
+const dayjs = require('dayjs')
 
 const OverviewPage = ({navigation, route}) => {
     const {uid, homestayID} = route.params;
@@ -39,6 +40,7 @@ const OverviewPage = ({navigation, route}) => {
             total: homestay.price,
             kategori: 'homestay',
             time: 86400,
+            paymentExpireDateTime: dayjs().add(24, 'hour').toDate().toString(),
         };
 
         firebase.database().ref('transaksi').push(data);
@@ -50,7 +52,6 @@ const OverviewPage = ({navigation, route}) => {
 
     const getHomestay = () => {
         firebase
-
             .database()
             .ref(`homestay/${homestayID}`)
             .on('value', res => {

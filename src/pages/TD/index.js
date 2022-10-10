@@ -20,6 +20,7 @@ import CountDown from '@ilterugur/react-native-countdown-component';
 import ButtonChat from '../../components/atoms/ButtonChat';
 import Ratings from '../../components/molecules/CardRating';
 import StarRating from 'react-native-star-rating-widget';
+import dayjs from "dayjs";
 
 const TransactionDetails = ({navigation, route}) => {
     const {uid, homestayID} = route.params;
@@ -27,28 +28,31 @@ const TransactionDetails = ({navigation, route}) => {
     const [users, setUsers] = useState({});
     const [ratingModal, setRatingModal] = useState(false);
     const [rating, setRating] = useState(0);
+
+    //quick fix for countdown component not updating
+    const [countdownComponentForceUpdate, setCountdownComponentForceUpdate] = useState(0);
+
     console.log(rating);
     // const time = Number(transaksi.time);
     const [time, setTime] = useState(transaksi.time);
     // console.log(typeof transaksi.time);
     // console.log(transaksi);
+
     const getTransaksi = () => {
         firebase
-
             .database()
             .ref(`transaksi/${homestayID}`)
             .on('value', res => {
                 if (res.val()) {
                     setTransaksi(res.val());
                     // setTime(res.val().time);
-                    //   setHarga(res.val().price);
+                    // setHarga(res.val().price);
                 }
             });
     };
 
     const getUser = () => {
         firebase
-
             .database()
             .ref(`users/pelanggan/${uid}`)
             .on('value', res => {
@@ -61,10 +65,19 @@ const TransactionDetails = ({navigation, route}) => {
             });
     };
 
+    useEffect(() => navigation.addListener('blur', () => {
+        setTransaksi(null);
+    }), [navigation]);
+
     useEffect(() => {
         getUser();
         getTransaksi();
     }, []);
+
+    //quick fix for countdown component not updating
+    useEffect(() =>
+        setCountdownComponentForceUpdate(prevState => prevState + 1)
+    , [transaksi?.paymentExpireDateTime])
 
     const sendOnWa = () => {
         let mobile = transaksi.noHandphoneOwner;
@@ -180,7 +193,6 @@ const TransactionDetails = ({navigation, route}) => {
             <View
                 style={{
                     height: 1,
-
                     backgroundColor: 'rgba(0, 0, 0, 0.3)',
                     width: 371,
                     alignSelf: 'center',
@@ -239,7 +251,18 @@ const TransactionDetails = ({navigation, route}) => {
                     flexDirection: 'row',
                 }}>
                 <CountDown
-                    until={transaksi.time}
+                    /*
+                    ni react-native-countdown-component untuk sementara ada bug:
+                    ((https://github.com/talalmajali/react-native-countdown-component/issues/102))
+
+                    Depe countdown nda mo ta update walaupun tu data yang torang
+                    ada passing ke 'until' itu so ta ganti.
+
+                    Untuk sementara, depe fix itu torang msti rubah tu prop 'id' tiap kali torang pe
+                    data transaksi berubah, makanya ada tambah state baru yang depe nama 'countdownComponentForceUpdate'
+                    */
+                    id={countdownComponentForceUpdate} //quick fix for countdown component not updating
+                    until={transaksi?.paymentExpireDateTime ? dayjs(transaksi.paymentExpireDateTime).diff(dayjs(), 'second') : 0}
                     digitStyle={{backgroundColor: 'white'}}
                     onFinish={() => alert('finished')}
                     // onPress={() => alert('hello')}
