@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useEffect, useState} from 'react';
 import {
   Image,
@@ -13,14 +14,18 @@ import Loading from '../../components/molecules/Loading';
 
 import Button from '../../components/atoms/Button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+const dayjs = require('dayjs');
 
 const MenuGazebo = ({navigation, route}) => {
   const {uid, homestayID} = route.params;
   const [homestay, setHomestay] = useState({});
   const [harga, setHarga] = useState('');
   const [status, setStatus] = useState('');
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [Date, setDate] = useState('');
+  // const [Date, setDate] = useState('');
+    const [checkInDate, setCheckInDate] = useState(null)
+    const [checkOutDate, setCheckOutDate] = useState(null)
+    const [showDatePicker, setShowDatePicker] = useState(false)
+    const [currentDatePickerContext, setCurrentDatePickerContext] = useState('')
 
   const [loading, setLoading] = useState(false);
 
@@ -64,13 +69,8 @@ const MenuGazebo = ({navigation, route}) => {
     getHomestay();
   }, []);
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+  const toggleDatePicker = isVisible =>
+    setShowDatePicker(isVisible)
 
   return (
     <>
@@ -206,16 +206,55 @@ const MenuGazebo = ({navigation, route}) => {
             </View>
 
             {/* Check in/out */}
-            <View style={{marginLeft: 37, marginTop: 22}}>
+            <View style={{marginLeft: '4.8%', marginTop: 22}}>
               <View>
-                <Button title={'Check in'} onPress={showDatePicker} />
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onCancel={hideDatePicker}
-                  onChange={value => setDate(value)}
-                />
-                <Text>{Date}</Text>
+              {
+                  [
+                      ['Check-in', () => {
+                          toggleDatePicker(true)
+                          setCurrentDatePickerContext('checkIn')
+                      }, checkInDate],
+                      ['Check-out', () => {
+                          toggleDatePicker(true)
+                          setCurrentDatePickerContext('checkOut')
+                      }, checkOutDate],
+                  ].map((el, idx) =>
+                      <View key={idx} style={{marginBottom: 10}}>
+                            <Text style={{
+                                color: '#38A7D0',
+                            }}>
+                                {el[0]}
+                            </Text>
+                            <View style={{
+                                flexDirection: 'row',
+                            }}>
+                                <TouchableOpacity
+                                    style={{
+                                        backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                                        borderBottomWidth: 3,
+                                        borderBottomColor: 'rgba(0, 0, 0, 0.09)',
+                                        borderRadius: 3,
+                                        padding: 5,
+                                    }}
+                                    onPress={el[1]}
+                                >
+                                    <Text>{el[2] ? dayjs(el[2]).format('dddd, DD MMMM YYYY') : `Please add a ${el[0].toLowerCase()} date`}</Text>
+                                </TouchableOpacity>
+                            </View>
+                      </View>
+                  )
+              }
+
+              <Text>
+                  Max. 31 Days
+              </Text>
+
+              <Text style={{
+                  color: 'black',
+                  fontSize: 18,
+              }}>
+                  {checkInDate && checkOutDate ? `${dayjs(checkOutDate).diff(dayjs(checkInDate), 'day')} malam` : 'Please add a check-in and check-out date'}
+              </Text>
               </View>
 
               <View
@@ -249,6 +288,20 @@ const MenuGazebo = ({navigation, route}) => {
           </View>
         </View>
       </ScrollView>
+        <DateTimePickerModal
+            onConfirm={date => {
+                if(currentDatePickerContext === '')
+                    return alert("Internal Error: Date Picker context isn't primed!")
+
+                currentDatePickerContext === 'checkIn' ?
+                    setCheckInDate(date) :
+                    setCheckOutDate(date)
+
+                toggleDatePicker(false)
+            }}
+            onCancel={() => toggleDatePicker(false)}
+            isVisible={showDatePicker}
+        />
       {loading && <Loading />}
     </>
   );
