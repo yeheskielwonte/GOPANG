@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import Header from '../../components/molecules/header';
 import firebase from '../../config/Firebase';
-import StarRating from 'react-native-star-rating-widget';
 
 const OwnerMenu = ({navigation, route}) => {
   const {uid} = route.params;
@@ -10,8 +9,6 @@ const OwnerMenu = ({navigation, route}) => {
   const [warung, setWarung] = useState({});
   const [isHomestay, setIsHomestay] = useState(false);
   const [isWarung, setIsWarung] = useState(false);
-
-  const [rating, setRating] = useState(0);
 
   const getHomestay = () => {
     firebase
@@ -50,7 +47,22 @@ const OwnerMenu = ({navigation, route}) => {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <Header title="Home" />
-      <View>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
+          top: 5,
+          backgroundColor: '#00FFEF',
+          width: '33%',
+          height: '5%',
+          borderRadius: 20,
+        }}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
+          HOMESTAY
+        </Text>
+      </View>
+      <View style={{top: '2%'}}>
         {isHomestay === false && (
           <TouchableOpacity
             onPress={() => navigation.navigate('AddHomestay', {uid: uid})}>
@@ -90,7 +102,23 @@ const OwnerMenu = ({navigation, route}) => {
         )}
       </View>
 
-      <View style={{marginTop: 20}}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
+          top: '4%',
+          backgroundColor: '#00FFEF',
+          width: '33%',
+          height: '5%',
+          borderRadius: 20,
+        }}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: 'black'}}>
+          RESTAURANT
+        </Text>
+      </View>
+
+      <View style={{marginTop: '12%'}}>
         {isWarung === false && (
           <TouchableOpacity
             onPress={() => navigation.navigate('OAddWarung', {uid: uid})}>
@@ -118,11 +146,6 @@ const OwnerMenu = ({navigation, route}) => {
           </View>
         )}
       </View>
-      <StarRating
-        rating={rating}
-        onChange={setRating}
-        style={{alignSelf: 'center', top: '10%'}}
-      />
     </View>
   );
 };

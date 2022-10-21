@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState, useEffect} from 'react';
 import {
   Image,
@@ -56,7 +57,38 @@ const ODetails = ({navigation, route}) => {
     );
   };
 
+  const handleSave = () => {
+    navigation.navigate('OwnerMenu', {uid: uid});
+    firebase.database().ref(`homestay/${uid}`).update({photo: photoBase64});
+    console.log(photoBase64);
+  };
+
   const handleSubmit = () => {
+    if (namaBaru === '') {
+      setNamaBaru(homestay.nama);
+    }
+    if (alamatBaru === '') {
+      setAlamatBaru(homestay.alamat);
+    }
+    if (descriptionBaru === '') {
+      setDescriptionBaru(homestay.description);
+    }
+    if (priceBaru === '') {
+      setPriceBaru(homestay.price);
+    }
+    if (bedroomBaru === false) {
+      setBedroomBaru(homestay.bedroom);
+    }
+    if (bathroomBaru === false) {
+      setBathroomBaru(homestay.bathroom);
+    }
+    if (ACBaru === false) {
+      setACBaru(homestay.AC);
+    }
+    if (wifiBaru === false) {
+      setWifiBaru(homestay.wifi);
+    }
+
     setStatusModal(false);
     const data = {
       AC: ACBaru,
@@ -76,7 +108,6 @@ const ODetails = ({navigation, route}) => {
 
   const getHomestay = () => {
     firebase
-
       .database()
       .ref(`homestay/${uid}`)
       .on('value', res => {
@@ -94,156 +125,220 @@ const ODetails = ({navigation, route}) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Modal visible={statusModal} transparent={true} animationType="slide">
-        <View style={styles.Box}>
-          <Text
+        <ScrollView>
+          <View
             style={{
-              left: 10,
-              fontSize: 18,
-              color: 'black',
-              top: 5,
-              fontWeight: '600',
+              backgroundColor: 'white',
+              margin: 30,
+              marginTop: 60,
+              elevation: 10,
+              borderRadius: 10,
+              overflow: 'hidden',
             }}>
-            Edit your homestay
-          </Text>
-          <Text
-            style={{
-              left: 10,
-              fontSize: 15,
-              color: 'black',
-              top: 8,
-              fontWeight: '600',
-            }}>
-            Name
-          </Text>
-          <TextInput
-            placeholder={homestay.name}
-            style={styles.textInput}
-            value={namaBaru}
-            onChangeText={value => setNamaBaru(value)}
-          />
-          <Text
-            style={{
-              left: 10,
-              fontSize: 15,
-              color: 'black',
-              top: 8,
-              fontWeight: '600',
-            }}>
-            Address
-          </Text>
-          <TextInput
-            placeholder={homestay.description}
-            style={styles.textInput}
-            value={alamatBaru}
-            onChangeText={value => setAlamatBaru(value)}
-          />
-          <Text
-            style={{
-              left: 10,
-              fontSize: 15,
-              color: 'black',
-              top: 8,
-              fontWeight: '600',
-            }}>
-            Fasility
-          </Text>
+            <View
+              style={{
+                backgroundColor: 'rgba(0, 200, 255, 0.2)',
+                paddingVertical: 15,
+                paddingHorizontal: 10,
+              }}>
+              <Text style={{fontSize: 22, color: 'black', fontWeight: '600'}}>
+                Edit your homestay
+              </Text>
+            </View>
 
-          <View style={styles.fasilitas}>
-            <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Image
-                source={require('../../assets/owner/Doublebed.png')}
-                style={{height: 28, width: 28}}
+            <View style={{padding: 10}}>
+              <Text style={{fontSize: 15, color: 'black', fontWeight: '600'}}>
+                Name
+              </Text>
+              <TextInput
+                placeholder={homestay.name}
+                style={{
+                  borderColor: '#020202',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingLeft: 15,
+                  marginBottom: 15,
+                }}
+                value={namaBaru}
+                onChangeText={value => setNamaBaru(value)}
               />
-              <Text>Bedroom</Text>
-              <CheckBox
-                disabled={false}
-                value={bedroomBaru}
-                onValueChange={newValue => setBedroomBaru(newValue)}
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: 'black',
+                  fontWeight: '600',
+                }}>
+                Address
+              </Text>
+              <TextInput
+                placeholder={homestay.description}
+                style={{
+                  borderColor: '#020202',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingLeft: 15,
+                  marginBottom: 15,
+                }}
+                value={alamatBaru}
+                onChangeText={value => setAlamatBaru(value)}
               />
-            </View>
-            <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Image
-                source={require('../../assets/owner/bathtub.png')}
-                style={{height: 28, width: 28}}
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: 'black',
+                  fontWeight: '600',
+                  marginBottom: 15,
+                }}>
+                Facility
+              </Text>
+
+              <View style={{flexDirection: 'row', marginBottom: 15}}>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={require('../../assets/owner/Doublebed.png')}
+                    style={{height: 28, width: 28}}
+                  />
+                  <Text>Bedroom</Text>
+                  <CheckBox
+                    disabled={false}
+                    value={bedroomBaru}
+                    onValueChange={newValue => setBedroomBaru(newValue)}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={require('../../assets/owner/bathtub.png')}
+                    style={{height: 28, width: 28}}
+                  />
+                  <Text>Bathroom</Text>
+                  <CheckBox
+                    disabled={false}
+                    value={bathroomBaru}
+                    onValueChange={newValue => setBathroomBaru(newValue)}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={require('../../assets/owner/AC.png')}
+                    style={{height: 28, width: 28}}
+                  />
+                  <Text>AC</Text>
+                  <CheckBox
+                    disabled={false}
+                    value={ACBaru}
+                    onValueChange={newValue => setACBaru(newValue)}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={require('../../assets/owner/wifi.png')}
+                    style={{height: 28, width: 28}}
+                  />
+                  <Text>Wifi</Text>
+                  <CheckBox
+                    disabled={false}
+                    value={wifiBaru}
+                    onValueChange={newValue => setWifiBaru(newValue)}
+                  />
+                </View>
+              </View>
+
+              {/* <Text
+                        style={{
+                          left: 10,
+                          fontSize: 15,
+                          color: 'black',
+                          top: 8,
+                          fontWeight: '600',
+                        }}>
+                        Description
+                      </Text>
+                      <TextInput
+                        placeholder={homestay.description}
+                        style={styles.textInput}
+                        value={descriptionBaru}
+                        onChangeText={value => setDescriptionBaru(value)}
+                      /> */}
+              <Text style={{fontSize: 15, color: 'black', fontWeight: '600'}}>
+                Price
+              </Text>
+              <TextInput
+                placeholder={homestay.description}
+                style={{
+                  borderColor: '#020202',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingLeft: 15,
+                  marginBottom: 15,
+                }}
+                value={priceBaru}
+                onChangeText={value => setPriceBaru(value)}
               />
-              <Text>Bathroom</Text>
-              <CheckBox
-                disabled={false}
-                value={bathroomBaru}
-                onValueChange={newValue => setBathroomBaru(newValue)}
-              />
-            </View>
-            <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Image
-                source={require('../../assets/owner/AC.png')}
-                style={{height: 28, width: 28}}
-              />
-              <Text>AC</Text>
-              <CheckBox
-                disabled={false}
-                value={ACBaru}
-                onValueChange={newValue => setACBaru(newValue)}
-              />
-            </View>
-            <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-              <Image
-                source={require('../../assets/owner/wifi.png')}
-                style={{height: 28, width: 28}}
-              />
-              <Text>Wifi</Text>
-              <CheckBox
-                disabled={false}
-                value={wifiBaru}
-                onValueChange={newValue => setWifiBaru(newValue)}
-              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: '#38A7D0',
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    flex: 1,
+                    paddingVertical: 5,
+                    marginVertical: 10,
+                  }}
+                  onPress={handleSubmit}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: 'white',
+                      fontSize: 20,
+                    }}>
+                    Save
+                  </Text>
+                </TouchableOpacity>
+
+                <View style={{width: 10}} />
+
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    flex: 1,
+                    paddingVertical: 5,
+                    marginVertical: 10,
+                  }}
+                  onPress={() => setStatusModal(false)}>
+                  <Text style={{textAlign: 'center', fontSize: 20}}>
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-
-          {/* <Text
-            style={{
-              left: 10,
-              fontSize: 15,
-              color: 'black',
-              top: 8,
-              fontWeight: '600',
-            }}>
-            Description
-          </Text>
-          <TextInput
-            placeholder={homestay.description}
-            style={styles.textInput}
-            value={descriptionBaru}
-            onChangeText={value => setDescriptionBaru(value)}
-          /> */}
-          <Text
-            style={{
-              left: 10,
-              fontSize: 15,
-              color: 'black',
-              top: 8,
-              fontWeight: '600',
-            }}>
-            Price
-          </Text>
-          <TextInput
-            placeholder={homestay.description}
-            style={styles.textInput}
-            value={priceBaru}
-            onChangeText={value => setPriceBaru(value)}
-          />
-          <TouchableOpacity style={styles.Button} onPress={handleSubmit}>
-            <Text style={styles.Save}>Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{position: 'absolute', bottom: 19, right: 27}}
-            onPress={() => setStatusModal(false)}>
-            <Text style={{color: 'black', fontSize: 15}}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </Modal>
       <View style={{flex: 1}}>
         {/* Header */}
@@ -275,7 +370,7 @@ const ODetails = ({navigation, route}) => {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.Simpan}>
+          <TouchableOpacity style={styles.Simpan} onPress={() => handleSave()}>
             <Text style={styles.Simpan1}>Save</Text>
           </TouchableOpacity>
 
@@ -470,8 +565,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   Box: {
-    backgroundColor: '#E6E6E6',
-    // opacity: 0.9,
+    backgroundColor: '#E6E6E6', // opacity: 0.9,
     width: '85%',
     height: '57%',
     borderRadius: 5,
@@ -507,8 +601,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 39,
     marginLeft: '9%',
-    marginRight: '9%',
-    // width: '100%',
+    marginRight: '9%', // width: '100%',
     // justifyContent: 'center',
   },
   Simpan: {

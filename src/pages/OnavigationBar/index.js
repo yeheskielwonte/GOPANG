@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 import OwnerMenu from '../OwnerMenu';
-
+import OChatBox from '../OChatBox';
 import OOrder from '../OOrder';
 import OProfile from '../OProfile';
 import {View, Image} from 'react-native';
@@ -22,23 +22,9 @@ const Tabs = ({navigation, route}) => {
           marginBottom: 0,
           backgroundColor: 'white',
           elevation: 0,
-          height: 55,
-          width: '60%',
-          marginLeft: '20%',
-          position: 'absolute',
-          marginBottom: 18,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-
-          elevation: 5,
+          height: 63,
           paddingBottom: 20,
           paddingHorizontal: 10,
-          borderRadius: 50,
         },
         tabBarLabelStyle: {
           fontSize: 14,
@@ -83,6 +69,25 @@ const Tabs = ({navigation, route}) => {
           ),
         }}
       />
+      {/* <Tab.Screen
+        name="Message"
+        component={OChatBox}
+        initialParams={{uid: uid}}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({color}) => (
+            <View style={{marginTop: 16}}>
+              {color == '#28384D' ? (
+                <Image
+                  source={require('../../assets/icon/iconChatAktif.png')}
+                />
+              ) : (
+                <Image source={require('../../assets/icon/iconChat.png')} />
+              )}
+            </View>
+          ),
+        }}
+      /> */}
       <Tab.Screen
         name="Profile"
         component={OProfile}

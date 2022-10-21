@@ -51,7 +51,7 @@ const HomeMenu = ({navigation, route}) => {
       });
   };
 
-  const getHomestay = () => {
+  const getHomestay = async () => {
     firebase
       .database()
       .ref(`homestay`)
@@ -60,6 +60,7 @@ const HomeMenu = ({navigation, route}) => {
           //ubah menjadi array object
           const rawData = res.val();
           const productArray = [];
+
           // console.log(keranjang[0].namaProduk);
           Object.keys(rawData).map(key => {
             productArray.push({
@@ -67,7 +68,12 @@ const HomeMenu = ({navigation, route}) => {
               ...rawData[key],
             });
           });
-          setPictures(productArray);
+          const sort = productArray.sort(
+            (a, b) => a.totalRating - b.totalRating,
+          );
+          const descending = sort.reverse();
+          const slice = descending.slice(0, 3);
+          setPictures(slice);
         }
       });
   };
@@ -150,7 +156,7 @@ const HomeMenu = ({navigation, route}) => {
           {selectedValue === 'Paal' && (
             <View>
               {pictures
-                .filter(homestay => homestay.location.includes(locationPaal))
+                // .filter(homestay => homestay.location.includes(locationPaal))
                 .map(key => (
                   <View>
                     <CardHomestay
@@ -162,6 +168,7 @@ const HomeMenu = ({navigation, route}) => {
                         .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       // status={`${key.status}`}
                       onPress={() => handleSubmit(key.id)}
+                      rating={key.totalRating}
                     />
                   </View>
                 ))}
